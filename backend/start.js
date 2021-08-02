@@ -1,4 +1,4 @@
-const app = require("./index.js");
+const app = require("./app.js");
 const port = 5000
 
 const mongoose = require('mongoose')

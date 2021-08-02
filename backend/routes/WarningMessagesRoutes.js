@@ -11,15 +11,17 @@ router.get("/", async (req, res) => {
 router.post("/", async (req, res) => {
     let messages = req.body
 
-    for (let msg of messages) {
-            const query = { name: msg.name }
-            const newvalues = { $set: { message: msg.message, type: msg.type } }
-            await WarningMessages.findOneAndUpdate(query, newvalues, {
-                upsert: true,
-                new: true
-             })
-    }
-    res.json({ success: true })
+    const upserts = messages.map( msg => {
+        const query = { name: msg.name }
+        const newvalues = { $set: { message: msg.message, type: msg.type } }
+        return WarningMessages.findOneAndUpdate(query, newvalues, {
+            upsert: true,
+            new: true
+         })
+    })
+
+    await Promise.all(upserts)
+    res.json({ msg: "Sikeres mentés" })
 })
 
 module.exports = router;
