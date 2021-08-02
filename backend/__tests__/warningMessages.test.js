@@ -1,4 +1,4 @@
-const WarningMessages = require("../models/WarningMessages")
+const WarningMessage = require("../models/WarningMessage")
 const app = require("../app")
 const supertest = require("supertest")
 const request = supertest(app)
@@ -17,7 +17,7 @@ describe('testing warning-messages endpoints', () => {
     })
   
     afterEach(async () => {
-      await deleteAll([WarningMessages])
+      await deleteAll([WarningMessage])
     })
 
 
@@ -31,7 +31,7 @@ describe('testing warning-messages endpoints', () => {
 
     it("Get endpoint with non-empty database", async () => {
 
-        await WarningMessages.insertMany([
+        await WarningMessage.insertMany([
             {
                 "name": "calendar-msg-1", 
                 "message": "Rendelésre változatlanul időpont foglalás szükséges!!!", 
@@ -46,7 +46,7 @@ describe('testing warning-messages endpoints', () => {
 
         const res = await request.get("/api/warning-messages");
 
-        const count = await WarningMessages.countDocuments()  
+        const count = await WarningMessage.countDocuments()  
 
         expect(res.status).toBe(200);
         expect(res.body.length).toBe(2);
@@ -63,7 +63,7 @@ describe('testing warning-messages endpoints', () => {
             }
         ])
 
-        const count = await WarningMessages.countDocuments()  
+        const count = await WarningMessage.countDocuments()  
 
         expect(res.status).toBe(200);
         expect(res.body.msg).toBe("Sikeres mentés");
@@ -71,7 +71,7 @@ describe('testing warning-messages endpoints', () => {
     });
 
     it("Post endpoint with one message updates the existing message", async () => {
-        await new WarningMessages(
+        await new WarningMessage(
             {
                 "name": "calendar-msg-1", 
                 "message": "Rendelésre változatlanul időpont foglalás szükséges!!!", 
@@ -87,7 +87,7 @@ describe('testing warning-messages endpoints', () => {
             }
         ])
 
-        const messages = await WarningMessages.find() 
+        const messages = await WarningMessage.find() 
 
         expect(res.status).toBe(200);
         expect(res.body.msg).toBe("Sikeres mentés");
@@ -112,7 +112,7 @@ describe('testing warning-messages endpoints', () => {
             }
         ])
 
-        const messages = await WarningMessages.find() 
+        const messages = await WarningMessage.find() 
 
         expect(res.status).toBe(200);
         expect(res.body.msg).toBe("Sikeres mentés");

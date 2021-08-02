@@ -1,6 +1,6 @@
 const express = require("express")
 const router = express.Router()
-const WarningMessages = require("../models/WarningMessages")
+const WarningMessages = require("../models/WarningMessage")
 
 router.get("/", async (req, res) => {
 
