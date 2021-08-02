@@ -9,11 +9,12 @@ import axios from 'axios'
 import { BiHomeHeart } from 'react-icons/bi'
 import googleIcon from './images/google-icon.png'
 import Home from './components/Home'
+import About from './components/About'
 
 function App() {
   const [user, setUser] = useState()
   const [status, setStatus] = useState()
-  const url = "http://localhost:5000"
+  const url = "http://localhost:5000/api"
 
   const logout = () => { }
 
@@ -72,8 +73,13 @@ function App() {
       </Navbar>
 
       <Switch>
+        
         <Route path='/' exact>
           <Home url={url}></Home>
+        </Route>
+
+        <Route path='/about'>
+          <About></About>
         </Route>
 
       </Switch>

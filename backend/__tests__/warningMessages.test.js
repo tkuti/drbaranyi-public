@@ -2,29 +2,24 @@ const WarningMessages = require("../models/WarningMessages")
 const app = require("../index")
 const supertest = require("supertest")
 const request = supertest(app)
+const { startServer, stopServer, deleteAll } = require('./util/inMemDb')
 
-const mongoose = require("mongoose");
-const { MongoMemoryServer } = require('mongodb-memory-server')
 
-describe('testing warning-messages endpoint', () => {
-    let mongoServer = MongoMemoryServer;
-
-    beforeEach(async () => {
-        mongoServer = await MongoMemoryServer.create();
-        await mongoose.connect(mongoServer.getUri(), {
-            useNewUrlParser: true,
-            dbName: "test-warning-messages", useCreateIndex: true,
-            useUnifiedTopology: true,
-            useFindAndModify: false
-        });;
-    });
-
-    afterEach(async () => {
-        await mongoose.connection.close();
-        if (mongoServer) {
-            await mongoServer.stop();
-        }
+describe('testing warning-messages endpoints', () => {
+    let mongoServer
+  
+    beforeAll(async () => {
+      mongoServer = await startServer()
     })
+  
+    afterAll(async () => {
+      await stopServer(mongoServer)
+    })
+  
+    afterEach(async () => {
+      await deleteAll([WarningMessages])
+    })
+
 
     it("Get endpoint with empty database", async () => {
         const res = await request.get("/api/warning-messages");
