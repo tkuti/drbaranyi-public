@@ -10,6 +10,7 @@ import { BiHomeHeart } from 'react-icons/bi'
 import googleIcon from './images/google-icon.png'
 import Home from './components/Home'
 import About from './components/About'
+import Infos from './components/Infos'
 
 function App() {
   const [user, setUser] = useState()
@@ -34,7 +35,7 @@ function App() {
             <Link to='/about' className="nav-btn">
               Rólam
             </Link>
-            <Link to='/doctors' className="nav-btn">
+            <Link to='/infos' className="nav-btn">
               Körzeti információk
             </Link>
             <Link to='/faq' className="nav-btn">
@@ -80,6 +81,10 @@ function App() {
 
         <Route path='/about'>
           <About></About>
+        </Route>
+
+        <Route path='/infos'>
+          <Infos url={url}></Infos>
         </Route>
 
       </Switch>

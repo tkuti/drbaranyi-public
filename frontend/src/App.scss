@@ -269,4 +269,54 @@ $error-color: #c40b13;
       }
     }
   }
+
+  .doctors {
+    padding-top: 80px;
+    .info {
+      text-align: center;
+    }
+    .search {
+      input {
+        width: 80%;
+        display: block;
+        margin: 5px auto;
+        border-radius: 5px;
+      }
+    }
+    .address-container {
+      .address {
+        font-weight: bold;
+      }
+      .show-more {
+        text-align: center;
+        hr {
+          margin: 2px 0;
+          background-color: rgba(white, 0.5);
+        }
+        svg {
+          fill: $highlightedText;
+        }
+        &:hover {
+          cursor: pointer;
+        }
+      }
+    }
+    .doctors-details {
+      h3 {
+        text-align: center;
+      }
+      .doctor-card {
+        height: 150px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        .doctor-tel {
+          font-size: 1.2rem;
+          font-weight: 500;
+        }
+      }
+    }
+  }
+  
   
