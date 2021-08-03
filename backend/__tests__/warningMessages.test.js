@@ -51,6 +51,7 @@ describe('testing warning-messages endpoints', () => {
         expect(res.status).toBe(200);
         expect(res.body.length).toBe(2);
         expect(res.body[1].name).toBe("calendar-msg-2");
+        expect(res.body[1]._id).toBeDefined()
         expect(count).toBe(2);
     });
 

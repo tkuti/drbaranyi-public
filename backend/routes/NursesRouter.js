@@ -19,15 +19,19 @@ router.put("/", async (req, res) => {
     const nurse = req.body
     const query = { _id: nurse._id}
     const newvalues = { $set: { name: nurse.name, phone: nurse.phone } }
-    await Nurse.findOneAndUpdate(query, newvalues)
-
+    const resp = await Nurse.findOneAndUpdate(query, newvalues)
+    if (!resp) {
+        return res.status(404).json({msg: "Nem található a megadott védőnő!"})
+    } 
     res.json({msg: "Sikeres mentés"})
 })
 
 router.delete("/:_id", async (req, res) => {
     const id = req.params._id
-    await newNurse.deleteOne({_id: id})
-
+    const resp = await Nurse.findOneAndDelete({_id: id})
+    if (!resp) {
+        return res.status(404).json({msg: "Nem található a megadott védőnő!"})
+    } 
     res.json({msg: "Sikeres mentés"})
 })
 
