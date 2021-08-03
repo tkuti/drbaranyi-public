@@ -94,8 +94,7 @@ describe('testing nurses endpoints with non-empty database', () => {
 
     const nurse = await Nurse.findOne({ name: "Test Nurse1" })
     const nurseId = String(nurse._id)
-    const res = await request.put("/api/nurses").send({
-      _id: nurseId,
+    const res = await request.put(`/api/nurses/${nurseId}`).send({
       name: "Test Nurse Update",
       phone: "06-30 522-2222"
     });
@@ -111,8 +110,7 @@ describe('testing nurses endpoints with non-empty database', () => {
 
   it("Put endpoint with non-existing Id returns 403 error", async () => {
 
-    const res = await request.put("/api/nurses").send({
-      _id: "61081dea2793df1da15bf2fb",
+    const res = await request.put("/api/nurses/61081dea2793df1da15bf2fb").send({
       name: "Test Nurse Update",
       phone: "06-30 522-2222"
     });
@@ -127,9 +125,9 @@ describe('testing nurses endpoints with non-empty database', () => {
     const nurseId = String(nurse._id)
     const res = await request.delete(`/api/nurses/${nurseId}`)
 
-    const deletedUser = await Nurse.findOne({_id: nurseId})
+    const deletedNurse = await Nurse.findOne({_id: nurseId})
 
-    expect(deletedUser).toBeNull()
+    expect(deletedNurse).toBeNull()
     expect(res.status).toBe(200);
     expect(res.body.msg).toBe("Sikeres mentés");
   });

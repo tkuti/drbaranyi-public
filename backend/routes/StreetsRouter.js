@@ -1,35 +1,35 @@
 const express = require("express")
 const router = express.Router()
-const Nurse = require("../models/Nurse")
+const Street = require("../models/Street")
 
 router.get("/", async (req, res) => {
 
-    const messages = await Nurse.find()
-    res.json(messages)
+    const streets = await Street.find()
+    res.json(streets)
 });
 
 router.post("/", async (req, res) => {
-    const newNurse = new Nurse(req.body)
-    await newNurse.save()
+    const newStreet = new Street(req.body)
+    await newStreet.save()
 
     res.json({msg: "Sikeres mentés"})
 })
 
 router.put("/:_id", async (req, res) => {
     const query = { _id: req.params._id}
-    const newvalues = { $set: req.body }
-    const resp = await Nurse.findOneAndUpdate(query, newvalues)
+    const newvalues = { $set: req.body}
+    const resp = await Street.findOneAndUpdate(query, newvalues)
     if (!resp) {
-        return res.status(404).json({msg: "Nem található a megadott védőnő!"})
+        return res.status(404).json({msg: "Nem található a megadott utca!"})
     } 
     res.json({msg: "Sikeres mentés"})
 })
 
 router.delete("/:_id", async (req, res) => {
     const id = req.params._id
-    const resp = await Nurse.findOneAndDelete({_id: id})
+    const resp = await Street.findOneAndDelete({_id: id})
     if (!resp) {
-        return res.status(404).json({msg: "Nem található a megadott védőnő!"})
+        return res.status(404).json({msg: "Nem található a megadott utca!"})
     } 
     res.json({msg: "Sikeres mentés"})
 })
