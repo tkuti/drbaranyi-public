@@ -11,6 +11,7 @@ import googleIcon from './images/google-icon.png'
 import Home from './components/Home'
 import About from './components/About'
 import Infos from './components/Infos'
+import Login from './components/Login'
 
 function App() {
   const [user, setUser] = useState()
@@ -18,6 +19,11 @@ function App() {
   const url = "http://localhost:5000/api"
 
   const logout = () => { }
+
+  const googleSignIn = () => {
+    window.location.href =
+      "https://accounts.google.com/o/oauth2/v2/auth?response_type=code&prompt=select_account&client_id=365404339212-v2sulc0s0911p86hr1k76c9cj9fokjc3.apps.googleusercontent.com&scope=openid%20profile email&redirect_uri=http%3A//localhost:3000/login"
+  }
 
   return (
     <Router>
@@ -44,7 +50,8 @@ function App() {
             {
               !user &&
 
-              <button className="login-btn">
+              <button className="login-btn"
+                onClick={googleSignIn}>
                 <img src={googleIcon} alt="google-icon" className="icon" />
                 Bejelentkezés
               </button>
@@ -74,7 +81,7 @@ function App() {
       </Navbar>
 
       <Switch>
-        
+
         <Route path='/' exact>
           <Home url={url}></Home>
         </Route>
@@ -86,6 +93,10 @@ function App() {
         <Route path='/infos'>
           <Infos url={url}></Infos>
         </Route>
+
+        <Route path='/login'>
+            <Login url={url} />
+          </Route>
 
       </Switch>
     </Router>
