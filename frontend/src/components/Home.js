@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { Link } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import axios from 'axios'
+import UrlContext from '../contexts/urlContext'
 
-function Home({ url }) {
+function Home() {
     const [messages, setMessages] = useState()
+    const url = useContext(UrlContext)
 
     useEffect(() => {
         axios

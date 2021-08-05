@@ -12,15 +12,15 @@ router.post("/", getGoogleToken, checkUser, createJwtToken);
 async function getGoogleToken(req, res, next) {
     const code = req.body.code
     const headers = {
-        'Content-Type': 'application/x-www-form-urlencoded'
+        'Content-Type': 'application/json'
     }
-    const data = new URLSearchParams({
+    const data = {
         'code': code,
         'client_id': process.env.GOOGLE_CLIENT_ID,
         'client_secret': process.env.GOOGLE_SECRET,
         'redirect_uri': process.env.GOOGLE_REDIRECT_URI,
         'grant_type': 'authorization_code'
-    })
+    }
     try {
         const response = await axios.post(
             "https://oauth2.googleapis.com/token", data, headers
@@ -46,8 +46,8 @@ async function checkUser(req, res, next) {
             userId: sub,
             role: "user"
         }
-        const newUser = new User(user)
-        res.locals.user = await newUser.save()
+        const newUser = await new User(user).save()
+        res.locals.user = newUser.toJSON()
         next()
     } else {
         res.locals.user = foundUser.toJSON()
@@ -60,6 +60,7 @@ async function createJwtToken(req, res) {
     jwt.sign(res.locals.user, process.env.JWT_SECRET, { expiresIn: '8h' },
         function (err, token) {
             if (err) {
+                console.log(err)
                 res.status(404).json({
                     msg: 'Authorization failed!',
                 })

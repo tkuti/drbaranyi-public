@@ -1,16 +1,18 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import axios from 'axios'
 import { BiUpArrow, BiDownArrow } from 'react-icons/bi'
+import UrlContext from '../contexts/urlContext'
 
-function Infos({ url }) {
+function Infos() {
     const [streetList, setStreetList] = useState()
     const [filteredStreetList, setFilteredStreetList] = useState()
     const [showMore, setShowMore] = useState(false)
     const [nurseList, setNurseList] = useState()
+    const url = useContext(UrlContext)
 
     useEffect(() => {
         axios

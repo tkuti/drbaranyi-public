@@ -10,6 +10,7 @@ import Reception from './AboutMenu/Reception'
 import Lab from './AboutMenu/Lab'
 import Referrals from './AboutMenu/Referrals'
 
+
 function About() {
     const [menu, setMenu] = useState("Rólam")
 

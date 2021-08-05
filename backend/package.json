@@ -22,6 +22,7 @@
     "nodemon": "^2.0.12"
   },
   "devDependencies": {
+    "axios-mock-adapter": "^1.19.0",
     "jest": "^27.0.6",
     "supertest": "^6.1.3"
   },
