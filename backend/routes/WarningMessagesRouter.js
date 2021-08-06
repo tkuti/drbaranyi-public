@@ -1,6 +1,7 @@
 const express = require("express")
 const router = express.Router()
 const WarningMessages = require("../models/WarningMessage")
+const { checkUser, checkUserAdminRole} = require('../middlewares/checkAuthorization')
 
 router.get("/", async (req, res) => {
 
@@ -8,7 +9,8 @@ router.get("/", async (req, res) => {
     res.json(messages)
 });
 
-router.post("/", async (req, res) => {
+router.post("/", checkUser, checkUserAdminRole, async (req, res) => {
+
     let messages = req.body
 
     const upserts = messages.map( msg => {
