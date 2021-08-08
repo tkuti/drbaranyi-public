@@ -6,8 +6,8 @@ const checkBody = require('../middlewares/checkBody')
 
 router.get("/", async (req, res) => {
 
-    const messages = await Nurse.find()
-    res.json(messages)
+    const nurses = await Nurse.find()
+    res.json(nurses)
 });
 
 router.post("/", checkUser, checkUserAdminRole, checkBody, async (req, res) => {

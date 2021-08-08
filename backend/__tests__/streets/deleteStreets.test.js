@@ -59,7 +59,7 @@ describe('DELETE ./api/streets endpoint testing ', () => {
 
 
     it("Delete endpoint with proper admin role token deletes the street", async () => {
-        console.log(streetId)
+
         const res = await request.delete(`/api/streets/${streetId}`).set({ authorization: adminToken })
 
         const deletedStreet = await Street.findOne({ _id: streetId })

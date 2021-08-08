@@ -57,7 +57,7 @@ async function checkUser(req, res, next) {
 
 async function createJwtToken(req, res) {
 
-    jwt.sign(res.locals.user, process.env.JWT_SECRET, { expiresIn: '8h' },
+    jwt.sign(res.locals.user, process.env.JWT_SECRET, { expiresIn: '1h' },
         function (err, token) {
             if (err) {
                 console.log(err)
