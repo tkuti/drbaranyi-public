@@ -8,6 +8,7 @@ import About from './components/About'
 import Infos from './components/Infos'
 import Login from './components/Login'
 import Messages from './components/Messages'
+import Admin from './components/Admin'
 import UserContext from './contexts/userContext'
 import UrlContext from './contexts/urlContext'
 
@@ -22,11 +23,11 @@ function App() {
     const token = localStorage.getItem('authorization')
     if (token) {
       axios.get(`${url}/token`)
-      .then(res => setUser(res.data))
-      .catch(err => {
-        console.log(err.response.data.msg)
-        localStorage.removeItem('authorization')
-      })
+        .then(res => setUser(res.data))
+        .catch(err => {
+          console.log(err.response.data.msg)
+          localStorage.removeItem('authorization')
+        })
     }
   }
 
@@ -36,7 +37,7 @@ function App() {
 
   return (
     <Router>
-      <UserContext.Provider value={[user, setUser]}>
+      <UserContext.Provider value={{ user, setUser }}>
         <Navigation />
 
         <Switch>
@@ -57,12 +58,20 @@ function App() {
           </Route>
 
           <Route path='/messages'>
-          {
-            user 
-            ? <Messages />
-            : <Redirect push to="/" />
-          }
-        </Route>
+            {
+              user
+                ? <Messages />
+                : <Redirect push to="/" />
+            }
+          </Route>
+
+          <Route path='/admin'>
+            {
+              user && user.role === "admin"
+                ? <Admin />
+                : <Redirect push to="/" />
+            }
+          </Route>
 
         </Switch>
       </UserContext.Provider>

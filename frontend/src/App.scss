@@ -352,3 +352,19 @@ $error-color: #c40b13;
     margin: 5px;
   }
 }
+
+.admin {
+  padding-top: 80px;
+  .card-box {
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    .admin-icon {
+      font-size: 6rem;
+      margin-bottom: 20px;
+      color: $highlightedText;
+    }
+  }
+}

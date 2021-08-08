@@ -9,7 +9,7 @@ import googleIcon from '../images/google-icon.png'
 import UserContext from '../contexts/userContext'
 
 function Navigation() {
-    const [user, setUser] = useContext(UserContext)
+    const {user, setUser} = useContext(UserContext)
 
     const googleSignIn = () => {
         window.location.href =

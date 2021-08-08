@@ -8,7 +8,7 @@ import jwt_decode from "jwt-decode";
 function Login() {
     let history = useHistory()
     const url = useContext(UrlContext)
-    const [user, setUser] = useContext(UserContext)
+    const { setUser } = useContext(UserContext)
 
     useEffect(() => {
         const windowUrl = new URL(window.location.href)

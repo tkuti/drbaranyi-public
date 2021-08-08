@@ -8,7 +8,7 @@ import UserContext from '../contexts/userContext'
 import UrlContext from '../contexts/urlContext'
 
 function Messages() {
-    const [user, setUser] = useContext(UserContext)
+    const {user} = useContext(UserContext)
     const [messages, setMessages] = useState()
     const [newMessage, setNewMessage] = useState("")
     const [response, setResponse] = useState(false)
