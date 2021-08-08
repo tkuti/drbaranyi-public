@@ -21,6 +21,7 @@ function Infos() {
                 setStreetList(res.data)
                 setFilteredStreetList(res.data)
             })
+            .catch(err => console.log(err.response.data.msg))
     }, [])
 
     useEffect(() => {
@@ -29,6 +30,7 @@ function Infos() {
             .then((res) => {
                 setNurseList(res.data)
             })
+            .catch(err => console.log(err.response.data.msg))
     }, [])
 
     return (

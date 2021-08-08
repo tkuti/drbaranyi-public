@@ -11,6 +11,7 @@ router.get("/", async (req, res) => {
     res.json(streets)
 });
 
+
 router.post("/",
     checkUser,
     checkUserAdminRole,
@@ -22,6 +23,7 @@ router.post("/",
 
         res.json({ msg: "Sikeres mentés" })
     })
+
 
 router.put("/:_id",
     checkUser,
@@ -38,6 +40,7 @@ router.put("/:_id",
         res.json({ msg: "Sikeres mentés" })
     })
 
+
 router.delete("/:_id",
     checkUser,
     checkUserAdminRole,
@@ -52,4 +55,6 @@ router.delete("/:_id",
         res.json({ msg: "Sikeres mentés" })
     })
 
+
+    
 module.exports = router;

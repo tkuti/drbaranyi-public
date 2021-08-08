@@ -51,6 +51,7 @@ describe('POST ./api/warning-messages endpoint testing', () => {
         expect(res.body.msg).toBe("Nem megfelelő jogosultság!");
     });
 
+
     it("Post endpoint with proper admin role token inserts the new message", async () => {
 
         const res = await request.post("/api/warning-messages").send([
@@ -67,6 +68,7 @@ describe('POST ./api/warning-messages endpoint testing', () => {
         expect(res.body.msg).toBe("Sikeres mentés");
         expect(count).toBe(1);
     });
+
 
     it("Post endpoint with one message updates the existing message", async () => {
         await new WarningMessage(
@@ -95,6 +97,7 @@ describe('POST ./api/warning-messages endpoint testing', () => {
 
     });
 
+    
     it("Post endpoint with more new message inserts the new messages", async () => {
 
         const res = await request.post("/api/warning-messages").send([
