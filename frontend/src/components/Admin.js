@@ -13,7 +13,7 @@ import {
     useParams,
     useRouteMatch
 } from "react-router-dom";
-import EditStreets from './Admin/EditStreets'
+import EditStreets from './Admin/streets/EditStreets'
 
 function Admin() {
     let { path, url } = useRouteMatch();

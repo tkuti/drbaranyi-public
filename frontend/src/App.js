@@ -17,12 +17,16 @@ function App() {
   const [user, setUser] = useState("")
   const url = useContext(UrlContext)
 
-  console.log(user)
-
   const checkToken = () => {
     const token = localStorage.getItem('authorization')
     if (token) {
-      axios.get(`${url}/token`)
+      axios.get(`${url}/token`,                 
+      {
+        headers: {
+            'Content-Type': 'application/json',
+            authorization: `${localStorage.getItem('authorization')}`
+        },
+    })
         .then(res => setUser(res.data))
         .catch(err => {
           console.log(err.response.data.msg)

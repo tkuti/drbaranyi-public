@@ -367,4 +367,69 @@ $error-color: #c40b13;
       color: $highlightedText;
     }
   }
+
+  .admin-container {
+    margin: 0;
+    min-height: 100vh;
+    font-size: .95rem;
+    font-weight: 400;
+    background-color: rgba(255, 255, 255, .9);
+    hr {
+      background-color: $mainColor;
+    }
+  }
+}
+
+.admin-card {
+  color: black;
+  box-shadow: 0 0 2px black;
+  border-radius: 2px;
+  background-color: rgba(223, 223, 223, 0.8);
+  margin: 20px 0;
+  padding: 10px;
+}
+
+.admin-button {
+  border-radius: 1px;
+  font-weight: 500;
+  box-shadow: 0 0 2px grey;
+  padding: 5px 10px;
+  margin: 2px;
+  background-color: white;
+  border: 1px solid grey;
+  &:hover {
+    background-color: rgb(143, 142, 142);
+  }
+}
+
+.delete-btn {
+  background-color: rgba($error-color, .8);
+  &:hover {
+    background-color: $error-color;
+  }
+}
+
+.save-btn {
+  background-color: rgba(59, 121, 139, .8);
+  &:hover {
+    background-color: rgb(59, 121, 139);
+  }
+}
+
+.admin-edit-streets {
+  padding-top: 80px;
+  margin: 10px auto;
+  .street {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    margin-bottom: 5px;
+    .active {
+      border: 3px solid green;
+    }
+    .btns {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      justify-items: flex-end;
+    }
+  }
 }

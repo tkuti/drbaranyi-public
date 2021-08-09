@@ -4,9 +4,9 @@ import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import axios from 'axios'
-//import AdminEditAStreet from './AdminEditAStreet'
-//import AdminEditNewStreet from './AdminEditNewStreet'
-import UrlContext from '../../contexts/urlContext'
+import EditAStreet from './EditAStreet'
+import CreateNewStreet from './CreateNewStreet'
+import UrlContext from '../../../contexts/urlContext'
 
 function EditStreets() {
     const [streetList, setStreetList] = useState()
@@ -18,7 +18,8 @@ function EditStreets() {
         axios
             .get(`${url}/streets`)
             .then((res) => {
-                let streets = [...res.data].sort((a, b) => a.kozterulet.localeCompare(b.kozterulet))
+                let streets = [...res.data].sort((a, b) =>
+                    a.kozterulet.localeCompare(b.kozterulet))
                 setStreetList([])
                 setStreetList(streets)
             })
@@ -34,27 +35,25 @@ function EditStreets() {
                     </Col>
                 </Row>
                 <Row>
-                    {/* <Col>
+                    <Col>
                         {
                             streetList &&
-                            streetList.map((str, i) =>
-                                <AdminEditAStreet
-                                    key={i}
-                                    url={url}
+                            streetList.map((str) =>
+                                <EditAStreet
+                                    key={str._id}
                                     street={str}
                                     setResponse={setResponse}
-                                ></AdminEditAStreet>
+                                ></EditAStreet>
                             )
                         }
                         {
                             newStreet &&
-                            <AdminEditNewStreet
-                                url={url}
+                            <CreateNewStreet
                                 setResponse={setResponse}
                                 setNewStreet={setNewStreet}
-                            ></AdminEditNewStreet>
+                            ></CreateNewStreet>
                         }
-                    </Col> */}
+                    </Col>
                 </Row>
                 <Row>
                     <Col>
