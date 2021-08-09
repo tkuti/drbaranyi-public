@@ -416,6 +416,44 @@ $error-color: #c40b13;
   }
 }
 
+
+.admin-messages {
+  padding-top: 80px;
+  button {
+    margin-top: 10px;
+  }
+  .admin-msg-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    margin: 20px 0;
+    padding: 20px;
+    border-radius: 3px;
+    div {
+      display: flex;
+      justify-content: space-between;
+      margin: 3px 0;
+      .username {
+        font-weight: 500;
+      }
+    }
+    .incoming-msg {
+      color: $error-color;
+      font-size: 1.7rem;
+    }
+    .replied-msg {
+      color: green;
+      font-size: 1.7rem;
+    }
+  }
+  .write-message {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+  }
+}
+
+
 .admin-edit-streets {
   padding-top: 80px;
   margin: 10px auto;
@@ -433,3 +471,23 @@ $error-color: #c40b13;
     }
   }
 }
+
+.admin-edit-doctors {
+  padding-top: 80px;
+  .dr {
+    margin: 15px 5px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    justify-items: center;
+    #name {
+      width: 70%;
+    }
+    .active {
+      border: 5px solid green;
+    }
+    .btns {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+    }
+  }
+} 

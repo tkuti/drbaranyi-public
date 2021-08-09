@@ -13,7 +13,9 @@ import {
     useParams,
     useRouteMatch
 } from "react-router-dom";
+import AllMessages from './Admin/messages/AllMessages'
 import EditStreets from './Admin/streets/EditStreets'
+import EditNurses from './Admin/nurses/EditNurses'
 
 function Admin() {
     let { path, url } = useRouteMatch();
@@ -25,7 +27,7 @@ function Admin() {
                     <Col sm={12} md={6}>
                         <div className="card-box">
                             <BiMessageDetail className="admin-icon"></BiMessageDetail>
-                            <Link to="/admin-messages">
+                            <Link to={`${url}/messages`}>
                                 <button className="button">Üzenetek</button>
                             </Link>
                         </div>
@@ -61,8 +63,10 @@ function Admin() {
                     <Col sm={12} md={6}>
                         <div className="card-box">
                             <FaRegEdit className="admin-icon"></FaRegEdit>
-                            <Link to="/admin-edit-doctors">
-                                <button className="button">Védőnő szerkesztés</button>
+                            <Link to={`${url}/edit-nurses`}>
+                                <button className="button">
+                                    Védőnő szerkesztés
+                                </button>
                             </Link>
                         </div>
                     </Col>
@@ -70,7 +74,9 @@ function Admin() {
                         <div className="card-box">
                             <FaRegEdit className="admin-icon"></FaRegEdit>
                             <Link to={`${url}/edit-streets`}>
-                                <button className="button">Utca szerkesztés</button>
+                                <button className="button">
+                                    Utca szerkesztés
+                                </button>
                             </Link>
                         </div>
                     </Col>
@@ -78,9 +84,19 @@ function Admin() {
             </Route>
 
             <Switch>
+
+                <Route path={`${path}/messages`}>
+                    <AllMessages />
+                </Route>
+
+                <Route path={`${path}/edit-nurses`}>
+                    <EditNurses />
+                </Route>
+
                 <Route path={`${path}/edit-streets`}>
                     <EditStreets />
                 </Route>
+
             </Switch>
         </Container>
     )
