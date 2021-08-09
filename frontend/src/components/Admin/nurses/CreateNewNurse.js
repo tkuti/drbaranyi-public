@@ -1,20 +1,22 @@
 import React, { useState, useContext } from 'react'
 import axios from 'axios'
 import UrlContext from '../../../contexts/urlContext'
+import UserContext from '../../../contexts/userContext'
 
-function CreateNewNurse({ setResponse, setNewNurse }) {
+function CreateNewNurse({ setResponse, setNewNurse, setError }) {
     const [name, setName] = useState()
     const [phone, setPhone] = useState()
     const url = useContext(UrlContext)
+    const { error401Handler } = useContext(UserContext)
 
     const doctorInsert = () => {
         axios.post(`${url}/nurses`, { name: name, phone: phone },
-        {
-            headers: {
-                'Content-Type': 'application/json',
-                authorization: `${localStorage.getItem('authorization')}`
-            },
-        })
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    authorization: `${localStorage.getItem('authorization')}`
+                },
+            })
             .then((res) => {
                 setResponse(res.data.msg)
                 setNewNurse(false)
@@ -23,7 +25,8 @@ function CreateNewNurse({ setResponse, setNewNurse }) {
                 }, 2000)
             })
             .catch((err) => {
-                setResponse(err.response.data.msg)
+                setError(err.response.data.msg)
+                error401Handler(err)
             })
     }
 

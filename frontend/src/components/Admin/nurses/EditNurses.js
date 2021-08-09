@@ -11,6 +11,7 @@ import UrlContext from '../../../contexts/urlContext'
 function EditNurses() {
     const [nurseList, setNurseList] = useState()
     const [response, setResponse] = useState(false)
+    const [error, setError] = useState(false)
     const [newNurse, setNewNurse] = useState(false)
     const url = useContext(UrlContext)
 
@@ -42,6 +43,7 @@ function EditNurses() {
                                         key={nurse._id}
                                         nurse={nurse}
                                         setResponse={setResponse}
+                                        setError={setError}
                                     ></EditANurse>
                                 )
                             }
@@ -50,6 +52,7 @@ function EditNurses() {
                                 <CreateNewNurse
                                     setResponse={setResponse}
                                     setNewNurse={setNewNurse}
+                                    setError={setError}
                                 ></CreateNewNurse>
                             }
                         </Col>
@@ -65,7 +68,15 @@ function EditNurses() {
                 </div>
                 {
                     response &&
-                    <div className="res-msg">Sikeres mentés</div>
+                    <div className="res-msg res-msg-success">
+                        {response}
+                    </div>
+                }
+                {
+                    error &&
+                    <div className="res-msg res-msg-error">
+                        {error}
+                    </div>
                 }
             </Container>
         </div>

@@ -15,8 +15,9 @@ function AllMessages() {
     const [selectedUser, setSelectedUser] = useState()
     const [newMessage, setNewMessage] = useState("")
     const [response, setResponse] = useState(false)
+    const [error, setError] = useState(false)
     const url = useContext(UrlContext)
-    const { user } = useContext(UserContext)
+    const { user, error401Handler } = useContext(UserContext)
 
     useEffect(() => {
         axios
@@ -45,6 +46,10 @@ function AllMessages() {
             .then((res) => {
                 setMessages(res.data)
             })
+            .catch((err) => {
+                setError(err.response.data.msg)
+                error401Handler(err)
+            })
     }
 
     const postNewMessage = () => {
@@ -71,7 +76,8 @@ function AllMessages() {
                     getMessages(selectedUser._id)
                 })
                 .catch((err) => {
-                    setResponse(err.response.data.msg)
+                    setError(err.response.data.msg)
+                    error401Handler(err)
                 })
     }
 
@@ -105,8 +111,9 @@ function AllMessages() {
                                                 setMessages(false)
                                                 setSelectedUser(user)
                                                 getMessages(user._id)
-                                            }}
-                                        >Üzenetek</button>
+                                            }}>
+                                            Üzenetek
+                                        </button>
                                     </div>
                                 )
                             }
@@ -149,6 +156,12 @@ function AllMessages() {
                         </div>
                     </Col>
                 </Row>
+                {
+                    error &&
+                    <div className="res-msg res-msg-error">
+                        {error}
+                    </div>
+                }
             </Container>
         </div>
     )

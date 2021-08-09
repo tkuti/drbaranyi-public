@@ -141,12 +141,19 @@ $error-color: #c40b13;
   position: fixed;
   top: 70px;
   right: 20px;
-  background-color: green;
   font-size: 1.5rem;
   font-weight: 700;
   padding: 5px 20px;
   border-radius: 5px;
   color: white;
+}
+
+.res-msg-success {
+  background-color: green;
+}
+
+.res-msg-error {
+  background-color: $error-color;
 }
 
 .card-box {

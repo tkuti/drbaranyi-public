@@ -1,14 +1,16 @@
 import React, { useState, useContext } from 'react'
 import axios from 'axios'
 import UrlContext from '../../../contexts/urlContext'
+import UserContext from '../../../contexts/userContext'
 
-function CreateNewStreet({ setResponse, setNewStreet }) {
+function CreateNewStreet({ setResponse, setNewStreet, setError}) {
     const [code, setCode] = useState()
     const [street, setStreet] = useState()
     const [type, setType] = useState()
     const [number, setNumber] = useState()
     const [side, setSide] = useState()
     const url = useContext(UrlContext)
+    const { error401Handler } = useContext(UserContext)
 
     const streetInsert = () => {
         axios.post(`${url}/streets`,
@@ -33,7 +35,8 @@ function CreateNewStreet({ setResponse, setNewStreet }) {
                 }, 2000)
             })
             .catch((err) => {
-                setResponse(err.response.data.msg)
+                setError(err.response.data.msg)
+                error401Handler(err)
             })
     }
 

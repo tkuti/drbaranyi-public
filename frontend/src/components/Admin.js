@@ -14,6 +14,7 @@ import {
     useRouteMatch
 } from "react-router-dom";
 import AllMessages from './Admin/messages/AllMessages'
+import EditWarningMessages from './Admin/warningMessages/EditWarningMessages'
 import EditStreets from './Admin/streets/EditStreets'
 import EditNurses from './Admin/nurses/EditNurses'
 
@@ -26,7 +27,8 @@ function Admin() {
                 <Row>
                     <Col sm={12} md={6}>
                         <div className="card-box">
-                            <BiMessageDetail className="admin-icon"></BiMessageDetail>
+                            <BiMessageDetail className="admin-icon">
+                            </BiMessageDetail>
                             <Link to={`${url}/messages`}>
                                 <button className="button">Üzenetek</button>
                             </Link>
@@ -34,7 +36,8 @@ function Admin() {
                     </Col>
                     <Col sm={12} md={6}>
                         <div className="card-box">
-                            <FaRegCalendarAlt className="admin-icon"></FaRegCalendarAlt>
+                            <FaRegCalendarAlt className="admin-icon">
+                            </FaRegCalendarAlt>
                             <Link to="/admin-calendar">
                                 <button className="button">Naptár</button>
                             </Link>
@@ -44,7 +47,8 @@ function Admin() {
                 <Row>
                     <Col sm={12} md={6}>
                         <div className="card-box">
-                            <FaQuestionCircle className="admin-icon"></FaQuestionCircle>
+                            <FaQuestionCircle className="admin-icon">
+                            </FaQuestionCircle>
                             <Link to="/admin-faq">
                                 <button className="button">Tanácsok</button>
                             </Link>
@@ -53,8 +57,10 @@ function Admin() {
                     <Col sm={12} md={6}>
                         <div className="card-box">
                             <FaRegEdit className="admin-icon"></FaRegEdit>
-                            <Link to="/admin-edit">
-                                <button className="button">Üzenet szerkesztés</button>
+                            <Link to={`${url}/edit-warning-messages`}>
+                                <button className="button">
+                                    Üzenet szerkesztés
+                                </button>
                             </Link>
                         </div>
                     </Col>
@@ -87,6 +93,10 @@ function Admin() {
 
                 <Route path={`${path}/messages`}>
                     <AllMessages />
+                </Route>
+
+                <Route path={`${path}/edit-warning-messages`}>
+                    <EditWarningMessages />
                 </Route>
 
                 <Route path={`${path}/edit-nurses`}>

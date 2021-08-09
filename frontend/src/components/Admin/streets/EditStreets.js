@@ -10,8 +10,9 @@ import UrlContext from '../../../contexts/urlContext'
 
 function EditStreets() {
     const [streetList, setStreetList] = useState()
-    const [response, setResponse] = useState(false)
     const [newStreet, setNewStreet] = useState(false)
+    const [response, setResponse] = useState(false)
+    const [error, setError] = useState(false)
     const url = useContext(UrlContext)
 
     useEffect(() => {
@@ -43,6 +44,7 @@ function EditStreets() {
                                     key={str._id}
                                     street={str}
                                     setResponse={setResponse}
+                                    setError={setError}
                                 ></EditAStreet>
                             )
                         }
@@ -51,6 +53,7 @@ function EditStreets() {
                             <CreateNewStreet
                                 setResponse={setResponse}
                                 setNewStreet={setNewStreet}
+                                setError={setError}
                             ></CreateNewStreet>
                         }
                     </Col>
@@ -61,7 +64,16 @@ function EditStreets() {
                     </Col>
                 </Row>
                 {
-                    response && <div className="res-msg">Sikeres mentés</div>
+                    response &&
+                    <div className="res-msg res-msg-success">
+                        {response}
+                    </div>
+                }
+                {
+                    error &&
+                    <div className="res-msg res-msg-error">
+                        {error}
+                    </div>
                 }
             </Container>
         </div>

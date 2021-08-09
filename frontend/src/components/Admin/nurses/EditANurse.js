@@ -1,11 +1,13 @@
 import React, { useState, useContext } from 'react'
 import axios from 'axios'
 import UrlContext from '../../../contexts/urlContext'
+import UserContext from '../../../contexts/userContext'
 
-function EditANurse({ nurse, setResponse }) {
+function EditANurse({ nurse, setResponse, setError}) {
     const [isEditable, setIsEditable] = useState(false)
     const [modifiedNurse, setModifiedNurse] = useState(nurse)
     const url = useContext(UrlContext)
+    const { error401Handler } = useContext(UserContext)
 
     const handleDataChange = (e) => {
         const value = e.target.value;
@@ -29,7 +31,8 @@ function EditANurse({ nurse, setResponse }) {
                 }, 2000)
             })
             .catch((err) => {
-                setResponse(err.response.data.msg)
+                setError(err.response.data.msg)
+                error401Handler(err)
             })
     }
 
@@ -49,13 +52,14 @@ function EditANurse({ nurse, setResponse }) {
                 }, 2000)
             })
             .catch((err) => {
-                setResponse(err.response.data.msg)
+                setError(err.response.data.msg)
+                error401Handler(err)
             })
     }
 
     return (
         <div className="dr">
-            <input type="text" name="name" id="name"
+            <input type="text" name="name"
                 readOnly={isEditable ? false : true}
                 onChange={handleDataChange}
                 defaultValue={nurse.name}

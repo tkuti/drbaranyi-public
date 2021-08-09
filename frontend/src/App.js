@@ -20,20 +20,30 @@ function App() {
   const checkToken = () => {
     const token = localStorage.getItem('authorization')
     if (token) {
-      axios.get(`${url}/token`,                 
-      {
-        headers: {
+      axios.get(`${url}/token`,
+        {
+          headers: {
             'Content-Type': 'application/json',
             authorization: `${localStorage.getItem('authorization')}`
-        },
-    })
+          },
+        })
         .then(res => setUser(res.data))
         .catch(err => {
-          console.log(err.response.data.msg)
           localStorage.removeItem('authorization')
+          setUser()
         })
     }
   }
+
+  const error401Handler = (err) => {
+    if (err.response.status === 401) {
+      setTimeout(() => {
+        localStorage.removeItem('authorization')
+        setUser("")
+      }, 2000)
+    }
+  }
+
 
   useEffect(() => {
     checkToken()
@@ -41,7 +51,7 @@ function App() {
 
   return (
     <Router>
-      <UserContext.Provider value={{ user, setUser }}>
+      <UserContext.Provider value={{ user, setUser, error401Handler }}>
         <Navigation />
 
         <Switch>

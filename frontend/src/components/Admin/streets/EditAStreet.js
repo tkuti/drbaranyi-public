@@ -1,11 +1,13 @@
 import React, { useState, useContext } from 'react'
 import axios from 'axios'
 import UrlContext from '../../../contexts/urlContext'
+import UserContext from '../../../contexts/userContext'
 
-function EditAStreet({ street, setResponse }) {
+function EditAStreet({ street, setResponse, setError }) {
     const [isEditable, setIsEditable] = useState(false)
     const [modifiedStreet, setModifiedStreet] = useState(street)
     const url = useContext(UrlContext)
+    const { error401Handler } = useContext(UserContext)
 
     const handleDataChange = (e) => {
         const value = e.target.value;
@@ -28,7 +30,8 @@ function EditAStreet({ street, setResponse }) {
                 }, 2000)
             })
             .catch((err) => {
-                setResponse(err.response.data.msg)
+                setError(err.response.data.msg)
+                error401Handler(err)
             })
     }
 
@@ -48,7 +51,8 @@ function EditAStreet({ street, setResponse }) {
                 }, 2000)
             })
             .catch((err) => {
-                setResponse(err.response.data.msg)
+                setError(err.response.data.msg)
+                error401Handler(err)
             })
     }
 
