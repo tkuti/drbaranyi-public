@@ -52,7 +52,7 @@ router.delete("/:_id",
         if (!resp) {
             return res.status(404).json({ msg: "Nem található a megadott utca!" })
         }
-        res.json({ msg: "Sikeres mentés" })
+        res.json({ msg: "Sikeres törlés" })
     })
 
 

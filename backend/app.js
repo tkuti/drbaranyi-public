@@ -10,6 +10,7 @@ const streetsRouter = require('./routers/StreetsRouter')
 const messagesRouter = require('./routers/MessagesRouter')
 const consultingHoursRouter = require('./routers/ConsultingHoursRouter')
 const specialDaysRouter = require('./routers/SpecialDaysRouter')
+const appointmentsRouter = require('./routers/AppointmentsRouter')
 
 const requestHandler = require('./middlewares/requestHandler')
 
@@ -27,6 +28,7 @@ app.use('/api/streets', streetsRouter)
 app.use('/api/messages', messagesRouter)
 app.use('/api/consulting-hours', consultingHoursRouter)
 app.use('/api/special-days', specialDaysRouter)
+app.use('/api/appointments', appointmentsRouter)
 
 app.get("/", async (req, res) => {
     res.send({ message: "hello" })
