@@ -21,9 +21,9 @@ router.post("/", checkUser, checkUserAdminRole, async (req, res) => {
             new: true
          })
     })
-    console.log("fut1")
+
     await Promise.all(upserts)
-    console.log("fut2")
+
     res.json({ msg: "Sikeres mentés" })
 })
 

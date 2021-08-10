@@ -2,7 +2,7 @@ const Message = require("../../models/Message")
 const app = require("../../app")
 const supertest = require("supertest")
 const request = supertest(app)
-const { startServer, stopServer, deleteAll } = require('../util/inMemDb')
+const { startServer, stopServer } = require('../util/inMemDb')
 const { createJwtUserToken } = require('../util/createJwtToken')
 
 const userToken = createJwtUserToken()
