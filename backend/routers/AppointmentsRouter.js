@@ -23,7 +23,7 @@ router.get("/:userId",
 );
 
 
-router.get("/:startDate/:endDate",
+router.get("/byInterval/:startDate/:endDate",
     checkUser,
     checkUserAdminRole,
     async (req, res) => {
@@ -40,7 +40,7 @@ router.get("/:startDate/:endDate",
     }
 );
 
-router.get("/listByDate/:date",
+router.get("/listTimesByDate/:date",
     checkUser,
     async (req, res) => {
 
@@ -51,7 +51,7 @@ router.get("/listByDate/:date",
         const appointments = await Appointment.find(query)
             .select("time -_id")
 
-        res.json(appointments)
+        res.json(appointments.map(app => app.time))
     }
 );
 
@@ -80,11 +80,22 @@ router.delete("/:_id",
 
         const id = req.params._id
 
-        const resp = await Appointment.findOneAndDelete({ _id: id })
+        const appointment = await Appointment.findOne({ _id: id })
 
-        if (!resp) {
-            return res.status(404).json({ msg: "Nem található a megadott időpont!" })
+        if (!appointment) {
+            return res.status(404).json(
+                { msg: "Nem található a megadott időpont!" }
+            )
         }
+
+        if (appointment.userId !== res.locals.user.userId) {
+            return res.status(403).json(
+                { msg: "Eltérő user!" }
+            )
+        }
+
+        await Appointment.deleteOne({ _id: id })
+
         res.json({ msg: "Sikeres törlés" })
     }
 )

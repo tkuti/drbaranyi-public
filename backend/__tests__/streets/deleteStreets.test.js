@@ -66,7 +66,7 @@ describe('DELETE ./api/streets endpoint testing ', () => {
 
         expect(deletedStreet).toBeNull()
         expect(res.status).toBe(200);
-        expect(res.body.msg).toBe("Sikeres mentés");
+        expect(res.body.msg).toBe("Sikeres törlés");
 
     })
 

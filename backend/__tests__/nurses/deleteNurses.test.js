@@ -61,7 +61,7 @@ describe('DELETE ./api/nurses endpoint testing ', () => {
        
         expect(deletedNurse).toBeNull()
         expect(res.status).toBe(200);
-        expect(res.body.msg).toBe("Sikeres mentés");
+        expect(res.body.msg).toBe("Sikeres törlés");
 
     })
 

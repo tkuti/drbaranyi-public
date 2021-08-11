@@ -1,9 +1,10 @@
+require('dotenv').config()
 const app = require("./app.js");
-const port = 5000
+const port = process.env.PORT
 
 const mongoose = require('mongoose')
 
-mongoose.connect(`mongodb+srv://drbaranyi:drbaranyi@cluster0.zbddu.mongodb.net/drbaranyi?retryWrites=true&w=majority`,
+mongoose.connect( process.env.MONGO_URL,
     {
         useNewUrlParser: true,
         useUnifiedTopology: true,
