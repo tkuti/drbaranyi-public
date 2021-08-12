@@ -503,6 +503,122 @@ $error-color: #c40b13;
   }
 }
 
+.admin-calendar {
+  max-width: 1400px;
+  padding: 80px 10px 0 10px;
+  margin: 0 auto;
+  .nav-btns {
+    display: flex;
+    flex-direction: column;
+    .button {
+      margin: 5px 0;
+    }
+  }
+  .edit-reservation {
+    background-color: rgba(white, .95);
+    border-radius: 3px;
+    padding: 10px 20px;
+    color: black;
+    box-shadow: 0 0 3px black;
+    h4 {
+      text-align: center;
+      padding: 15px 0;
+      color: $highlightedText;
+    }
+    .date {
+      text-align: center;
+      font-weight: 500;
+    }
+    .form {
+      padding: 20px 10px;
+      display: flex;
+      flex-direction: column;
+      select,
+      input {
+        margin: 5px 0;
+        padding: 5px 3px;
+        border-radius: 3px;
+      }
+    }
+    .buttons {
+      display: flex;
+      justify-content: space-evenly;
+      padding: 10px 0;
+    }
+  }
+  .calendar-box {
+    display: flex;
+    justify-content: space-evenly;
+    padding-bottom: 10px;
+    color: black;
+    .inactive {
+      color: rgba(grey, 0.5);
+    }
+    .day {
+      box-shadow: 0 0 2px grey;
+      padding: 5px;
+      width: 105px;
+      margin: 10px 0;
+      background-color: rgba(white, .95);
+      border: 1px solid gray;
+      .date {
+        text-align: center;
+        font-weight: 700;
+      }
+      .btns {
+        display: flex;
+        justify-content: space-evenly;
+      }
+      hr {
+        background-color: black;
+      }
+      .special-day-select {
+        display: flex;
+        justify-content: center;
+
+        #newDay {
+          margin-top: 5px;
+          color: grey;
+          border-radius: 3px;
+        }
+      }
+      .time-line {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 2px 0;
+        min-height: 42px;
+        .time {
+          margin: auto;
+          padding-left: 8px;
+        }
+        .info-button {
+          border-radius: 3px;
+          border: 1px solid grey;
+          height: 35px;
+          width: auto;
+        }
+        .description {
+          margin: 0 auto;
+          width: 80%;
+          padding: 0 10px;
+        }
+      }
+      .generale {
+        background-color: green;
+      }
+      .vaccination {
+        background-color: $error-color;
+      }
+      .pause {
+        background-color: grey;
+      }
+    }
+  }
+  #focus {
+    width: 330px;
+  }
+}
 
 .admin-edit-streets {
   padding-top: 80px;

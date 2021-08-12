@@ -14,6 +14,7 @@ import {
     useRouteMatch
 } from "react-router-dom";
 import AllMessages from './Admin/messages/AllMessages'
+import AdminCalendar from './Admin/calendar/AdminCalendar'
 import EditWarningMessages from './Admin/warningMessages/EditWarningMessages'
 import EditStreets from './Admin/streets/EditStreets'
 import EditNurses from './Admin/nurses/EditNurses'
@@ -38,8 +39,10 @@ function Admin() {
                         <div className="card-box">
                             <FaRegCalendarAlt className="admin-icon">
                             </FaRegCalendarAlt>
-                            <Link to="/admin-calendar">
-                                <button className="button">Naptár</button>
+                            <Link to={`${url}/calendar`}>
+                                <button className="button">
+                                    Naptár
+                                </button>
                             </Link>
                         </div>
                     </Col>
@@ -93,6 +96,10 @@ function Admin() {
 
                 <Route path={`${path}/messages`}>
                     <AllMessages />
+                </Route>
+
+                <Route path={`${path}/calendar`}>
+                    <AdminCalendar />
                 </Route>
 
                 <Route path={`${path}/edit-warning-messages`}>

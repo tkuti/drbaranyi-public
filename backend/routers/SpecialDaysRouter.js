@@ -35,7 +35,6 @@ router.post("/",
     checkUserAdminRole,
     async (req, res) => {
         let newSpecialDay = req.body
-
         const query = { day: newSpecialDay.day }
         const newvalues = { $set: { type: newSpecialDay.type, newDay: newSpecialDay.newDay } }
         const options = { upsert: true };

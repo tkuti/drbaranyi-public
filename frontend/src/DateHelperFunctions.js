@@ -13,6 +13,18 @@ export const getACertainWeek = (date) => {
     return week
 }
 
+
+export const getACertainFullWeek = (date) => {
+    let week = []
+    for (let i = 1; i <= 7; i++) {
+        let first = date.getDate() - date.getDay() + i
+        let day = new Date(date.setDate(first)).toISOString().slice(0, 10)
+        week.push(day)
+    }
+    return week
+}
+
+
 export const getNext3Weeks = () => {
     let date = new Date()
     let weeks = [getACertainWeek(date)]
@@ -23,6 +35,7 @@ export const getNext3Weeks = () => {
     return (weeks)
 }
 
+
 export const getWeekNumber = (day) => {
     let date = new Date(day.getTime());
     date.setHours(0, 0, 0, 0);
@@ -31,11 +44,13 @@ export const getWeekNumber = (day) => {
     return 1 + Math.round(((date.getTime() - week1.getTime()) / 86400000 - 3 + (week1.getDay() + 6) % 7) / 7);
 }
 
+
 export function setHoursAndMinutes(date, time) {
     const setHours = new Date(date).setHours(time.slice(0, 2))
     const setMinutes = new Date(setHours).setMinutes(time.slice(3, 5))
     return new Date(setMinutes)
 }
+
 
 export const getNameofDay = (stringDate) => {
     return nameOfDays[new Date(stringDate).getDay() - 1]

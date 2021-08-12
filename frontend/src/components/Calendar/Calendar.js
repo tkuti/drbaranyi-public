@@ -143,9 +143,10 @@ function Calendar() {
 
 
     useEffect(() => {
-        
+
         if (selectedDate && reservedTimes) {
 
+            
             //set all consulting hours of the selected date
             let hoursOfSelectedDate
 
