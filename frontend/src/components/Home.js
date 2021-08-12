@@ -1,44 +1,19 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
-import axios from 'axios'
-import UrlContext from '../contexts/urlContext'
+import DisplayWarningMessages from './DisplayWarningMessages'
+
 
 function Home() {
-    const [messages, setMessages] = useState()
-    const url = useContext(UrlContext)
-
-    useEffect(() => {
-        axios
-            .get(`${url}/warning-messages`)
-            .then((res) => {
-                setMessages(res.data.filter(msg => msg.name.includes("home")))
-            })
-    }, [])
 
     return (
         <div>
              <div id="background-color1" className="background"></div>
             <Container className="home">
-                <Row>
-                    {
-                        messages &&
-                        messages.map((msg, i) =>
-                            <Col lg={12} key={i}>
-                                <div className="info-message-box">
-                                    {
-                                        msg.message.split("\n").map((line, index) =>
-                                            <p key={index}>{line}</p>
-                                        )
-                                    }
-                                </div>
-                            </Col>
-                        )
-                    }
-                </Row>
+                <DisplayWarningMessages type="home"/>
                 <Row>
                     <Col sm={12} md={6}>
                         <div className="welcome card-box">

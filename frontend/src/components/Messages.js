@@ -8,10 +8,11 @@ import UserContext from '../contexts/userContext'
 import UrlContext from '../contexts/urlContext'
 
 function Messages() {
-    const {user} = useContext(UserContext)
+    const {user, error401Handler} = useContext(UserContext)
     const [messages, setMessages] = useState()
     const [newMessage, setNewMessage] = useState("")
     const [response, setResponse] = useState(false)
+    const [error, setError] = useState(false)
     const url = useContext(UrlContext)
 
     useEffect(() => {
@@ -26,6 +27,10 @@ function Messages() {
             )
             .then((res) => {
                 setMessages(res.data)
+            })
+            .catch((err) => {
+                setError(err.response.data.msg)
+                error401Handler(err)
             })
     }, [response])
 
@@ -96,6 +101,12 @@ function Messages() {
                         </div>
                     </Col>
                 </Row>
+                {
+                    error &&
+                    <div className="res-msg res-msg-error">
+                        {error}
+                    </div>
+                }
             </Container>
         </>
     )

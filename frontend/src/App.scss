@@ -360,6 +360,49 @@ $error-color: #c40b13;
   }
 }
 
+.calendar {
+  padding-top: 80px;
+  font-weight: 700;
+  .calendar-info {
+    text-align: justify;
+    .hl-green {
+      color: green;
+    }
+    .hl-red {
+      color: $error-color;
+    }
+  }
+  .user-appointment {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    margin-bottom: 25px;
+    .details {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      justify-items: end;
+      padding: 5px;
+      span:first-child {
+        justify-self: start;
+      }
+    }
+  }
+  .booking {
+    margin-bottom: 40px;
+    button,
+    select,
+    input {
+      display: block;
+      width: 90%;
+      margin: 10px auto;
+    }
+  }
+  .date {
+    color: $highlightedText;
+  }
+}
+
 .admin {
   padding-top: 80px;
   .card-box {

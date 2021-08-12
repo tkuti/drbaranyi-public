@@ -8,6 +8,7 @@ import About from './components/About'
 import Infos from './components/Infos'
 import Login from './components/Login'
 import Messages from './components/Messages'
+import Calendar from './components/Calendar/Calendar'
 import Admin from './components/Admin'
 import UserContext from './contexts/userContext'
 import UrlContext from './contexts/urlContext'
@@ -75,6 +76,14 @@ function App() {
             {
               user
                 ? <Messages />
+                : <Redirect push to="/" />
+            }
+          </Route>
+
+          <Route path='/calendar'>
+            {
+              user
+                ? <Calendar />
                 : <Redirect push to="/" />
             }
           </Route>
