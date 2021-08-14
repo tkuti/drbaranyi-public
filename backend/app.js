@@ -11,14 +11,18 @@ const messagesRouter = require('./routers/MessagesRouter')
 const consultingHoursRouter = require('./routers/ConsultingHoursRouter')
 const specialDaysRouter = require('./routers/SpecialDaysRouter')
 const appointmentsRouter = require('./routers/AppointmentsRouter')
+const questionsRouter = require('./routers/QuestionsRouter')
+const imagesRouter = require('./routers/ImagesRouter')
 
 const requestHandler = require('./middlewares/requestHandler')
 
 
 app.use(cors())
 app.use(express.json())
-
+app.use(express.static('uploads'))
 app.use(requestHandler)
+
+
 app.use('/api/login', loginRouter)
 app.use('/api/token', tokenRouter)
 app.use('/api/users', usersRouter)
@@ -29,10 +33,9 @@ app.use('/api/messages', messagesRouter)
 app.use('/api/consulting-hours', consultingHoursRouter)
 app.use('/api/special-days', specialDaysRouter)
 app.use('/api/appointments', appointmentsRouter)
+app.use('/api/questions', questionsRouter)
+app.use('/api/images', imagesRouter)
 
-app.get("/", async (req, res) => {
-    res.send({ message: "hello" })
-})
 
 
 
