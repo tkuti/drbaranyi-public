@@ -123,7 +123,7 @@ $error-color: #c40b13;
   color: $highlightedText;
 }
 
-.info-message-box {
+.warning-message-box {
   margin: 3px 0;
   background-color: rgba($error-color, 0.9);
   text-align: center;
@@ -620,6 +620,29 @@ $error-color: #c40b13;
   }
 }
 
+.admin-edit {
+  padding-top: 80px;
+  .edit-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 30px;
+    h2 {
+      text-align: center;
+    }
+    textarea {
+      margin: 15px;
+      width: 350px;
+    }
+    select {
+      padding: 5px 10px;
+      margin-right: 50px;
+      border-radius: 5px;
+    }
+  }
+}
+
+
 .admin-edit-streets {
   padding-top: 80px;
   margin: 10px auto;
@@ -657,3 +680,34 @@ $error-color: #c40b13;
     }
   }
 } 
+
+@media (max-width: 768px) {
+  #root {
+    font-size: 14px;
+  }
+  .home {
+    padding-bottom: 150px;
+  }
+  .footer {
+    flex-direction: column;
+  }
+  .admin-calendar {
+    .calendar-box {
+      flex-direction: column;
+      .day, #focus {
+        width: 100%;
+      }
+      .day{
+        margin: 10px 0;
+      }
+    }
+  }
+  .faq {
+    img, iframe {
+      width: 90%;
+      margin: 10px auto;
+      float: none;
+      display: block;
+    }
+  }
+}

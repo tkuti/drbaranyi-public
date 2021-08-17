@@ -3,11 +3,11 @@ const router = express.Router()
 const SpecialDay = require("../models/SpecialDay")
 const { checkUser, checkUserAdminRole } = require('../middlewares/checkAuthorization')
 
-router.get("/:day",
+router.get("/:date",
     checkUser,
     async (req, res) => {
 
-        const query = { day: new Date(req.params.day).toISOString() }
+        const query = { day: new Date(req.params.date).toISOString() }
         const specialDay = await SpecialDay.findOne(query)
 
         res.json(specialDay)

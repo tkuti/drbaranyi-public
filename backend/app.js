@@ -13,6 +13,7 @@ const specialDaysRouter = require('./routers/SpecialDaysRouter')
 const appointmentsRouter = require('./routers/AppointmentsRouter')
 const questionsRouter = require('./routers/QuestionsRouter')
 const imagesRouter = require('./routers/ImagesRouter')
+const docsRouter = require('./routers/DocsRouter')
 
 const requestHandler = require('./middlewares/requestHandler')
 
@@ -35,6 +36,7 @@ app.use('/api/special-days', specialDaysRouter)
 app.use('/api/appointments', appointmentsRouter)
 app.use('/api/questions', questionsRouter)
 app.use('/api/images', imagesRouter)
+app.use('/api/docs', docsRouter)
 
 
 

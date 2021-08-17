@@ -20,7 +20,7 @@ router.post("/",
     checkUserAdminRole,
     uploads.single('image'), (req, res) => {
         const image = req.file.path
-        res.json({ success: true })
+        res.json({ msg: "Sikeres mentés" })
     }
 );
 

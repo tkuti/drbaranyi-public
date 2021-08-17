@@ -6,7 +6,10 @@ const User = require('../models/User')
 require('dotenv').config()
 
 
-router.post("/", getGoogleToken, checkUser, createJwtToken);
+router.post("/",
+    getGoogleToken,
+    checkUser,
+    createJwtToken);
 
 
 async function getGoogleToken(req, res, next) {
@@ -28,7 +31,7 @@ async function getGoogleToken(req, res, next) {
         res.locals.token = response.data.id_token
         next()
     } catch (error) {
-        res.status(404).json({
+        res.status(401).json({
             msg: 'Authentication failed!',
         })
     }
@@ -61,7 +64,7 @@ async function createJwtToken(req, res) {
         function (err, token) {
             if (err) {
                 console.log(err)
-                res.status(404).json({
+                res.status(403).json({
                     msg: 'Authorization failed!',
                 })
             } else {

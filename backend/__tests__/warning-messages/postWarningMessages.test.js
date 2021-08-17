@@ -25,13 +25,13 @@ describe('POST ./api/warning-messages endpoint testing', () => {
 
 
     it("Post endpoint without token responds with 401", async () => {
-        const res = await request.post("/api/warning-messages").send([
-            {
-                "name": "calendar-msg-1",
-                "message": "Rendelésre változatlanul időpont foglalás szükséges!!!",
-                "type": "default"
-            }
-        ])
+        const res = await request.post("/api/warning-messages")
+            .send([
+                {
+                    "name": "calendar-msg-1",
+                    "message": "Rendelésre változatlanul időpont foglalás szükséges!!!"
+                }
+            ])
 
         expect(res.status).toBe(401);
         expect(res.body.msg).toBe("Nem azonosítható küldő (hiányzó, hibás vagy lejárt token!");;
@@ -39,13 +39,14 @@ describe('POST ./api/warning-messages endpoint testing', () => {
 
 
     it("Post endpoint with user role token responds with 403", async () => {
-        const res = await request.post("/api/warning-messages").send([
-            {
-                "name": "calendar-msg-1",
-                "message": "Rendelésre változatlanul időpont foglalás szükséges!!!",
-                "type": "default"
-            }
-        ]).set({ authorization: userToken })
+        const res = await request.post("/api/warning-messages")
+            .send([
+                {
+                    "name": "calendar-msg-1",
+                    "message": "Rendelésre változatlanul időpont foglalás szükséges!!!"
+                }
+            ])
+            .set({ authorization: userToken })
 
         expect(res.status).toBe(403);
         expect(res.body.msg).toBe("Nem megfelelő jogosultság!");
@@ -54,13 +55,14 @@ describe('POST ./api/warning-messages endpoint testing', () => {
 
     it("Post endpoint with proper admin role token inserts the new message", async () => {
 
-        const res = await request.post("/api/warning-messages").send([
-            {
-                "name": "calendar-msg-1",
-                "message": "Rendelésre változatlanul időpont foglalás szükséges!!!",
-                "type": "default"
-            }
-        ]).set({ authorization: adminToken })
+        const res = await request.post("/api/warning-messages")
+            .send([
+                {
+                    "name": "calendar-msg-1",
+                    "message": "Rendelésre változatlanul időpont foglalás szükséges!!!"
+                }
+            ])
+            .set({ authorization: adminToken })
 
         const count = await WarningMessage.countDocuments()
 
@@ -74,18 +76,18 @@ describe('POST ./api/warning-messages endpoint testing', () => {
         await new WarningMessage(
             {
                 "name": "calendar-msg-1",
-                "message": "Rendelésre változatlanul időpont foglalás szükséges!!!",
-                "type": "default"
+                "message": "Rendelésre változatlanul időpont foglalás szükséges!!!"
             }
         ).save()
 
-        const res = await request.post("/api/warning-messages").send([
-            {
-                "name": "calendar-msg-1",
-                "message": "Test update",
-                "type": "info"
-            }
-        ]).set({ authorization: adminToken })
+        const res = await request.post("/api/warning-messages")
+            .send([
+                {
+                    "name": "calendar-msg-1",
+                    "message": "Test update"
+                }
+            ])
+            .set({ authorization: adminToken })
 
         const messages = await WarningMessage.find()
 
@@ -97,21 +99,21 @@ describe('POST ./api/warning-messages endpoint testing', () => {
 
     });
 
-    
+
     it("Post endpoint with more new message inserts the new messages", async () => {
 
-        const res = await request.post("/api/warning-messages").send([
-            {
-                "name": "calendar-msg-1",
-                "message": "Test message1",
-                "type": "info"
-            },
-            {
-                "name": "calendar-msg-2",
-                "message": "Test message2",
-                "type": "info"
-            }
-        ]).set({ authorization: adminToken })
+        const res = await request.post("/api/warning-messages")
+            .send([
+                {
+                    "name": "calendar-msg-1",
+                    "message": "Test message1"
+                },
+                {
+                    "name": "calendar-msg-2",
+                    "message": "Test message2"
+                }
+            ])
+            .set({ authorization: adminToken })
 
         const messages = await WarningMessage.find()
 

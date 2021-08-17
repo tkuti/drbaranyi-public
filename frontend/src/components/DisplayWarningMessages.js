@@ -24,7 +24,7 @@ function DisplayWarningMessages({type}) {
             messages &&
             messages.map( msg =>
                 <Col lg={12} key={msg._id}>
-                    <div className="info-message-box">
+                    <div className="warning-message-box">
                         {
                             msg.message.split("\n").map((line, index) =>
                                 <p key={index}>{line}</p>

@@ -7,6 +7,7 @@ import Col from 'react-bootstrap/Col'
 import UrlContext from '../../../contexts/urlContext'
 import UserContext from '../../../contexts/userContext'
 
+
 function EditWarningMessages() {
     const [messages, setMessages] = useState(null)
     const [response, setResponse] = useState(false)
@@ -22,6 +23,7 @@ function EditWarningMessages() {
             })
     }, [response])
 
+
     const handleMessageChange = (e) => {
         const value = e.target.value;
         const name = e.target.name;
@@ -30,6 +32,7 @@ function EditWarningMessages() {
             : msg));
     }
 
+    
     const postMessages = () => {
         axios.post(`${url}/warning-messages`, messages,
             {
@@ -80,23 +83,6 @@ function EditWarningMessages() {
                                 </textarea>
                             </div>
                             <div key={messages}>
-                                <select name="style" id="style"
-                                    defaultValue={messages
-                                        ? messages.find(msg =>
-                                            msg.name.includes("home")).type
-                                        : "error"}
-                                    onChange={(e) => setMessages(
-                                        messages.map(msg =>
-                                            msg.name.includes("home")
-                                                ? { ...msg, type: e.target.value }
-                                                : msg
-                                        )
-                                    )}>
-                                    <option value="success">SUCCESS</option>
-                                    <option value="error" >ERROR</option>
-                                    <option value="default">DEFAULT</option>
-                                    <option value="none">NONE</option>
-                                </select>
                                 <button onClick={postMessages}
                                     className="admin-button save-btn">
                                     Mentés
@@ -130,21 +116,6 @@ function EditWarningMessages() {
                                 </textarea>
                             </div>
                             <div key={messages}>
-                                <select name="style" id="style"
-                                    defaultValue={messages
-                                        ? messages.find(msg => msg.name.includes("calendar")).type
-                                        : "error"}
-                                    onChange={(e) => setMessages(
-                                        messages.map(msg => msg.name.includes("calendar")
-                                            ? { ...msg, type: e.target.value }
-                                            : msg
-                                        )
-                                    )}>
-                                    <option value="success">SUCCESS</option>
-                                    <option value="error">ERROR</option>
-                                    <option value="default">DEFAULT</option>
-                                    <option value="none">NONE</option>
-                                </select>
                                 <button onClick={postMessages}
                                     className="admin-button save-btn">
                                     Mentés

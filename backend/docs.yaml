@@ -1,0 +1,1155 @@
+swagger: "2.0"
+info:
+  description: "This is a server for an application of a pediatrist. It can store users, handle private messages and appointments. It's admin system provides management of the webpage content, messages and reservations. It has Google authentication system."
+  version: "1.0.0"
+  title: "Dr Baranyi WebApp"
+  contact:
+    email: "tunde.kuti@gmail.com"
+  license:
+    name: "Tünde Kuti"
+    url: "https://github.com/tkuti"
+host: localhost:5000
+basePath: /api
+schemes:
+  - http
+tags:
+- name: "users"
+  description: "Get users"
+- name: "nurses"
+  description: "Operations about nurses"
+- name: "streets"
+  description: "Operations about streets"
+- name: "questions"
+  description: "Operations about frequently asked questions"
+- name: "messages"
+  description: "Operations about messages"
+- name: "appointments"
+  description: "Operations about appointments"
+- name: "warning-messages"
+  description: "Operations about warning messages"
+- name: "consulting-hours"
+  description: "Get consulting-hours"
+- name: "special-days"
+  description: "Operations about special days (inactive or  active saturdays)"
+- name: "images"
+  description: "Operations about images of faq questions"
+- name: "authentication, authorization"
+  description: "Endpoints for login and authorization"
+paths:
+  /users:
+    get:
+      security: 
+      - JWT: []
+      tags:
+      - "users"
+      summary: "Get all users"
+      description: "Returns all users"
+      operationId: "findAllUsers"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/User"
+        '401':
+          $ref: '#/responses/UnauthenticatedError'
+        '403':
+          $ref: '#/responses/UnauthorizedError'
+  /nurses:
+    get:
+      tags:
+      - "nurses"
+      summary: "Find all nurses"
+      description: "Returns all nurses"
+      operationId: "getNurses"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Nurse"
+    post:
+      tags:
+      - "nurses"
+      security: 
+      - JWT: []
+      summary: "Add a new nurse to the app"
+      description: "Inserts a new nurse to database"
+      operationId: "addNurse"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Nurse object that needs to be added to the app"
+        required: true
+        schema:
+          $ref: "#/definitions/NewNurse"
+      responses:
+        "200":
+          $ref: "#/responses/SuccessMessage"
+        '400':
+          $ref: '#/responses/MissingDatasError'
+        '401':
+          $ref: '#/responses/UnauthenticatedError'
+        '403':
+          $ref: '#/responses/UnauthorizedError'
+  /nurses/{_id}:
+    put:
+      tags:
+      - "nurses"
+      security: 
+      - JWT: []
+      summary: "Update an existing nurse"
+      description: "Updates the existing nurse by _id"
+      operationId: "updateNurse"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "_id"
+        in: "path"
+        description: "Id of the nurse to update"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Nurse object that needs to be update"
+        required: true
+        schema:
+          $ref: "#/definitions/NewNurse"
+      responses:
+        "200":
+          $ref: "#/responses/SuccessMessage"
+        '400':
+          $ref: '#/responses/MissingDatasError'
+        '401':
+          $ref: '#/responses/UnauthenticatedError'
+        '403':
+          $ref: '#/responses/UnauthorizedError'
+        '404':
+          description: "Nem található a megadott védőnő!"
+    delete:
+      tags:
+      - "nurses"
+      security: 
+      - JWT: []
+      summary: "Delete nurse by _id"
+      description: "Deletes the existing nurse by _id"
+      operationId: "deleteNurse"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "_id"
+        in: "path"
+        description: "Id of the nurse to delete"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          $ref: "#/responses/SuccessMessage"
+        '401':
+          $ref: '#/responses/UnauthenticatedError'
+        '403':
+          $ref: '#/responses/UnauthorizedError'
+        '404':
+          description: "Nem található a megadott védőnő!"
+  /streets:
+    get:
+      tags:
+      - "streets"
+      summary: "Find all streets"
+      description: "Returns all streets"
+      operationId: "getStreets"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Street"
+    post:
+      tags:
+      - "streets"
+      security: 
+      - JWT: []
+      summary: "Add a new street to the app"
+      description: "Inserts a new street to database"
+      operationId: "addStreet"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Street object that needs to be added to the app"
+        required: true
+        schema:
+          $ref: "#/definitions/NewStreet"
+      responses:
+        "200":
+          $ref: "#/responses/SuccessMessage"
+        '400':
+          $ref: '#/responses/MissingDatasError'
+        '401':
+          $ref: '#/responses/UnauthenticatedError'
+        '403':
+          $ref: '#/responses/UnauthorizedError'
+  /streets/{_id}:
+    put:
+      tags:
+      - "streets"
+      security: 
+      - JWT: []
+      summary: "Update an existing street"
+      description: "Updates the existing street by _id"
+      operationId: "updateStreet"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "_id"
+        in: "path"
+        description: "Id of the street to update"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Street object that needs to be update"
+        required: true
+        schema:
+          $ref: "#/definitions/NewStreet"
+      responses:
+        "200":
+          $ref: "#/responses/SuccessMessage"
+        '400':
+          $ref: '#/responses/MissingDatasError'
+        '401':
+          $ref: '#/responses/UnauthenticatedError'
+        '403':
+          $ref: '#/responses/UnauthorizedError'
+        '404':
+          description: "Nem található a megadott utca!"
+    delete:
+      tags:
+      - "streets"
+      security: 
+      - JWT: []
+      summary: "Delete street by _id"
+      description: "Deletes the existing street by _id"
+      operationId: "deleteStreet"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "_id"
+        in: "path"
+        description: "Id of the street to delete"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          $ref: "#/responses/SuccessMessage"
+        '401':
+          $ref: '#/responses/UnauthenticatedError'
+        '403':
+          $ref: '#/responses/UnauthorizedError'
+        '404':
+          description: "Nem található a megadott utca!"
+  /questions:
+    get:
+      tags:
+      - "questions"
+      summary: "Find all questions"
+      description: "Returns all questions"
+      operationId: "getQuestions"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Question"
+    post:
+      tags:
+      - "questions"
+      security: 
+      - JWT: []
+      summary: "Add a new question to the app"
+      description: "Inserts a new question to database"
+      operationId: "addQuestion"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Question object that needs to be added to the app"
+        required: true
+        schema:
+          $ref: "#/definitions/NewQuestion"
+      responses:
+        "200":
+          $ref: "#/responses/SuccessMessage"
+        '401':
+          $ref: '#/responses/UnauthenticatedError'
+        '403':
+          $ref: '#/responses/UnauthorizedError'
+  /questions/{_id}:
+    put:
+      tags:
+      - "questions"
+      security: 
+      - JWT: []
+      summary: "Update an existing question"
+      description: "Updates the existing question by _id"
+      operationId: "updateQuestion"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "_id"
+        in: "path"
+        description: "Id of the question to update"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Question object that needs to be update"
+        required: true
+        schema:
+          $ref: "#/definitions/NewQuestion"
+      responses:
+        "200":
+          $ref: "#/responses/SuccessMessage"
+        '401':
+          $ref: '#/responses/UnauthenticatedError'
+        '403':
+          $ref: '#/responses/UnauthorizedError'
+        '404':
+          description: "Nem található a megadott kérdés!"
+    delete:
+      tags:
+      - "questions"
+      security: 
+      - JWT: []
+      summary: "Delete question by _id"
+      description: "Deletes the existing question by _id"
+      operationId: "deleteQuestion"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "_id"
+        in: "path"
+        description: "Id of the question to delete"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          $ref: "#/responses/SuccessMessage"
+        '401':
+          $ref: '#/responses/UnauthenticatedError'
+        '403':
+          $ref: '#/responses/UnauthorizedError'
+        '404':
+          description: "Nem található a megadott kérdés!"
+  /messages/{userId}:
+    post:
+      tags:
+      - "messages"
+      security: 
+      - JWT: []
+      summary: "Add a new messages to the user"
+      description: "Inserts a new message to the user"
+      operationId: "addMessage"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "userId"
+        in: "path"
+        description: "UserId of the user to add new message"
+        required: true
+        type: "string"  
+      - in: "body"
+        name: "body"
+        description: "Message object that needs to be added to the app"
+        required: true
+        schema:
+          $ref: "#/definitions/NewMessage"
+      responses:
+        "200":
+          $ref: "#/responses/SuccessMessage"
+        '400':
+          $ref: '#/responses/MissingDatasError'
+        '401':
+          $ref: '#/responses/UnauthenticatedError'
+        '403':
+          $ref: '#/responses/DifferentUserError'
+  /messages/byuser/{userId}:
+    get:
+      tags:
+      - "messages"
+      security: 
+      - JWT: []
+      summary: "Find user's all messages"
+      description: "Returns all messages of the user, sorted by date desc"
+      operationId: "getMessagesByUser"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "userId"
+        in: "path"
+        description: "UserId of the user to get messages"
+        required: true
+        type: "string"  
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Message"
+        '401':
+          $ref: '#/responses/UnauthenticatedError'
+        '403':
+          $ref: '#/responses/DifferentUserError'
+  /messages/lastMessageByUsers:
+    get:
+      tags:
+      - "messages"
+      security: 
+      - JWT: []
+      summary: "Find users' last messages"
+      description: "Returns the users' last messages, sorted by date desc"
+      operationId: "getLastMessageByUsers"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/LastMessageByUsers"
+        '401':
+          $ref: '#/responses/UnauthenticatedError'
+        '403':
+          $ref: '#/responses/UnauthorizedError'
+  /appointments:
+    post:
+      tags:
+      - "appointments"
+      security: 
+      - JWT: []
+      summary: "Add a new appointment to the app"
+      description: "Inserts a new appointment to database"
+      operationId: "addAppointment"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Appointment object that needs to be added to the app"
+        required: true
+        schema:
+          $ref: "#/definitions/NewAppointment"
+      responses:
+        "200":
+          $ref: "#/responses/SuccessMessage"
+        '400':
+          $ref: '#/responses/MissingDatasError'
+        '401':
+          $ref: '#/responses/UnauthenticatedError'
+        '403':
+          $ref: '#/responses/DifferentUserError'
+  /appointments/{userId}:
+    get:
+      tags:
+      - "appointments"
+      security: 
+      - JWT: []
+      summary: "Find user's all appointments"
+      description: "Returns user's all appointments"
+      operationId: "getAppointmentsByUserId"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "userId"
+        in: "path"
+        description: "UserId of the user to get appointments"
+        required: true
+        type: "string"  
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Appointment"
+        '401':
+          $ref: '#/responses/UnauthenticatedError'
+        '403':
+          $ref: '#/responses/DifferentUserError'
+  /appointments/byInterval/{startDate}/{endDate}:
+    get:
+      tags:
+      - "appointments"
+      security: 
+      - JWT: []
+      summary: "Find appointments by date interval"
+      description: "Returns the existing appointments between the given date interval"
+      operationId: "getAppointmentsByDateInterval"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "startDate"
+        in: "path"
+        description: "Start date of the interval (includes)"
+        required: true
+        type: "string"
+        example: "2021-03-03"
+      - name: "endDate"
+        in: "path"
+        description: "End date of the interval (includes)"
+        required: true
+        type: "string"
+        example: "2021-03-03"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Appointment"
+        '401':
+          $ref: '#/responses/UnauthenticatedError'
+        '403':
+          $ref: '#/responses/UnauthorizedError'
+  /appointments/listTimesByDate/{date}:
+    get:
+      tags:
+      - "appointments"
+      security: 
+      - JWT: []
+      summary: "Find reserved times by date"
+      description: "Returns the reserved times on the given date"
+      operationId: "getAppointmentsByDate"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "date"
+        in: "path"
+        description: "Date to find the reserved times"
+        required: true
+        type: "string"
+        example: "2021-03-03"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              type: "string"
+        '401':
+          $ref: '#/responses/UnauthenticatedError'
+  /appointments/{_id}:
+    delete:
+      tags:
+      - "appointments"
+      security: 
+      - JWT: []
+      summary: "Delete appointment by _id"
+      description: "Deletes the existing appointment by _id"
+      operationId: "deleteAppointment"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "_id"
+        in: "path"
+        description: "Id of the appointment to delete"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          $ref: "#/responses/SuccessMessage"
+        '401':
+          $ref: '#/responses/UnauthenticatedError'
+        '403':
+          $ref: '#/responses/DifferentUserError'
+        '404':
+          description: "Nem található a megadott időpont!"
+  /warning-messages:
+    get:
+      tags:
+      - "warning-messages"
+      summary: "Find all warning-messages"
+      description: "Returns all warning-messages"
+      operationId: "getWarningMessages"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/WarningMessage"
+    post:
+      tags:
+      - "warning-messages"
+      security: 
+      - JWT: []
+      summary: "Add or update warning-messages"
+      description: "Inserts a new warning-messages to database or updates the existing ones"
+      operationId: "addOrUpdateWarningMessages"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Warning messages objects in array that needs to be added or updated"
+        required: true
+        schema:
+          type: "array"
+          items:
+            $ref: "#/definitions/NewWarningMessage"
+      responses:
+        "200":
+          $ref: "#/responses/SuccessMessage"
+        '401':
+          $ref: '#/responses/UnauthenticatedError'
+        '403':
+          $ref: '#/responses/UnauthorizedError'
+  /consulting-hours:
+    get:
+      security: 
+      - JWT: []
+      tags:
+      - "consulting-hours"
+      summary: "Get all consulting-hours"
+      description: "Returns all consulting-hours"
+      operationId: "findAllConsultingHours"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/ConsultingHours"
+        '401':
+          $ref: '#/responses/UnauthenticatedError'
+  /special-days:
+    post:
+      tags:
+      - "special-days"
+      security: 
+      - JWT: []
+      summary: "Add a new special day or update an existing one"
+      description: "Inserts a new special day to database or updates an existing one"
+      operationId: "addOrUpdateSpecialDay"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Special-day object that needs to be added or updated"
+        required: true
+        schema:
+          $ref: "#/definitions/NewSpecialDay"
+      responses:
+        "200":
+          $ref: "#/responses/SuccessMessage"
+        '401':
+          $ref: '#/responses/UnauthenticatedError'
+        '403':
+          $ref: '#/responses/UnauthorizedError'
+  /special-days/{date}:
+    get:
+      tags:
+      - "special-days"
+      security: 
+      - JWT: []
+      summary: "Find all special days by date"
+      description: "Returns all special days by date"
+      operationId: "getSpecialDaysByDate"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "date"
+        in: "path"
+        description: "Date to find if it is a special day"
+        required: true
+        type: "string"  
+        example: "2021-03-03"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/SpecialDay"
+        '401':
+          $ref: '#/responses/UnauthenticatedError'
+  /special-days/{startDate}/{endDate}:
+    get:
+      tags:
+      - "special-days"
+      security: 
+      - JWT: []
+      summary: "Find special-days by date interval"
+      description: "Returns the existing special-days between the given date interval"
+      operationId: "getSpecialDaysByDateInterval"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "startDate"
+        in: "path"
+        description: "Start date of the interval (includes)"
+        required: true
+        type: "string"
+        example: "2021-03-03"
+      - name: "endDate"
+        in: "path"
+        description: "End date of the interval (includes)"
+        required: true
+        type: "string"
+        example: "2021-03-06"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/SpecialDay"
+        '401':
+          $ref: '#/responses/UnauthenticatedError'
+  /images:
+    get:
+      tags:
+      - "images"
+      summary: "Get all image names"
+      description: "Returns all image names"
+      operationId: "findAllImages"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              type: "string"
+    post:
+      tags:
+      - "images"
+      security: 
+      - JWT: []
+      summary: "Add a new image to the app"
+      description: "Inserts a new images to the server"
+      operationId: "addImage"
+      consumes:
+      - "multipart/form-data'"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "formData"
+        name: "image"
+        description: "Image that needs to be uploaded to the app"
+        required: true
+      responses:
+        "200":
+          $ref: "#/responses/SuccessMessage"
+        '401':
+          $ref: '#/responses/UnauthenticatedError'
+        '403':
+          $ref: '#/responses/UnauthorizedError'
+  /login:
+    post:
+      tags:
+      - "authentication, authorization"
+      summary: "Log in a user to the app"
+      description: "Checks the user and returns a jwt token"
+      operationId: "loginUser"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Code from Google"
+        required: true
+        schema:
+          type: "object"
+          properties:
+            code:
+              type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "object"
+            properties:
+              authorization: 
+                type: "string"
+        '401':
+          description: 'Authentication failed!'
+        '403':
+          description: 'Authorization failed!'
+  /token:
+    get:
+      tags:
+      - "authentication, authorization"
+      summary: "Check authorization token"
+      description: "Checks the token in header and returns the user"
+      operationId: "checkToken"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "header"
+        name: "authorization"
+        type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/User"
+        '401':
+          $ref: '#/responses/UnauthenticatedError'
+securityDefinitions:
+  JWT:
+    type: apiKey
+    name: authorization
+    in: header
+responses:
+  UnauthenticatedError:
+    description: Nem azonosítható küldő (hiányzó, hibás vagy lejárt token)!
+  UnauthorizedError:
+    description: Nem megfelelő jogosultság!
+  MissingDatasError:
+    description: Hiányzó adatok!
+  DifferentUserError:
+    description: Eltérő user!
+  SuccessMessage:
+    description: Sikeres mentés
+    schema:
+      type: "object"
+      properties:
+        msg:
+          type: "string"
+definitions:
+  User:
+    type: "object"
+    properties:
+      _id:
+        type: "string"
+      userId:
+        type: "string"
+      name:
+        type: "string"
+      email:
+        type: "string"
+      role:
+        type: "string"
+  Nurse:
+    type: "object"
+    properties:
+      _id:
+        type: "string"
+      name:
+        type: "string"
+      phone:
+        type: "string"
+  NewNurse:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      phone:
+        type: "string"
+  Street:
+    type: "object"
+    properties:
+      _id:
+        type: "string"
+      irsz:
+        type: "string"
+      kozterulet:
+        type: "string"
+      jelleg:
+        type: "string"
+      hsz:
+        type: "string"
+      oldal:
+        type: "string"
+  NewStreet:
+    type: "object"
+    properties:
+      irsz:
+        type: "string"
+      kozterulet:
+        type: "string"
+      jelleg:
+        type: "string"
+      hsz:
+        type: "string"
+      oldal:
+        type: "string"
+  Question:
+    type: "object"
+    properties:
+      _id:
+        type: "string"
+      question:
+        type: "string"
+      answer:
+        type: "string"
+      img:
+        type: "array"
+        items:
+          type: "string"
+      video:
+        type: "string"
+  NewQuestion:
+    type: "object"
+    properties:
+      question:
+        type: "string"
+      answer:
+        type: "string"
+      img:
+        type: "array"
+        items:
+          type: "string"
+      video:
+        type: "string"
+  Message:
+    type: "object"
+    properties:
+      _id:
+        type: "string"
+      userId:
+        type: "string"
+      type:
+        type: "string"
+        enum:
+          - question
+          - answer
+      userName:
+        type: "string"
+      date:
+        type: "string"
+        format: "date"
+        example: "2021-03-03T00:00:00.000Z"
+      message:
+        type: "string"
+      creatorId:
+        type: "string"
+  NewMessage:
+    type: "object"
+    properties:
+      userId:
+        type: "string"
+      type:
+        type: "string"
+        enum:
+          - question
+          - answer
+      userName:
+        type: "string"
+      date:
+        type: "string"
+        format: "date"
+        example: "2021-03-03T00:00:00.000Z"
+      message:
+        type: "string"
+      creatorId:
+        type: "string"
+  LastMessageByUsers:
+    type: "object"
+    properties:
+      _id:
+        type: "string"
+      userName:
+        type: "string"
+      lastmessageType:
+        type: "string"
+        enum:
+          - question
+          - answer
+      newest:
+        type: "string"
+        format: "date"
+        example: "2021-03-03T00:00:00.000Z"
+  Appointment:
+    type: "object"
+    properties:
+      _id:
+        type: "string"
+      userId:
+        type: "string"
+      userName:
+        type: "string"
+      email:
+        type: "string"
+      description:
+        type: "string"
+      event:
+        type: "string"
+        enum:
+          - "vaccination"
+          - "generale"
+          - "pause"
+      day:
+        type: "string"
+        format: "date"
+        example: "2021-03-03T00:00:00.000Z"
+      time:
+        type: "string"
+  NewAppointment:
+    type: "object"
+    properties:
+      userId:
+        type: "string"
+      userName:
+        type: "string"
+      email:
+        type: "string"
+      description:
+        type: "string"
+      event:
+        type: "string"
+        enum:
+          - "vaccination"
+          - "generale"
+          - "pause"
+      day:
+        type: "string"
+        format: "date"
+        example: "2021-03-03T00:00:00.000Z"
+      time:
+        type: "string"
+  WarningMessage:
+    type: "object"
+    properties:
+      _id:
+        type: "string"
+      name:
+        type: "string"
+      message:
+        type: "string"
+      type:
+        type: "string"
+  NewWarningMessage:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      message:
+        type: "string"
+      type:
+        type: "string"
+  ConsultingHours:
+    type: "object"
+    properties:
+      _id:
+        type: "string"
+      name:
+        type: "string"
+      hours:
+        type: "array"
+        items:
+          type: "object"
+          properties:
+            type: 
+              type: "string"
+              enum:
+                - "vaccination"
+                - "generale"
+            time:
+              type: "string"
+  SpecialDay:
+    type: "object"
+    properties:
+      _id:
+        type: "string"
+      day:
+        type: "string"
+        format: "date"
+      type:
+        type: "string"
+        enums:
+          - "inactive"
+          - "active"
+      newday:
+        type: "string"
+  NewSpecialDay:
+    type: "object"
+    properties:
+      day:
+        type: "string"
+        format: "date"
+      type:
+        type: "string"
+        enums:
+          - "inactive"
+          - "active"
+      newday:
+        type: "string"
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"

@@ -34,13 +34,11 @@ describe('GET ./api/warning-messages endpoint testing ', () => {
         await WarningMessage.insertMany([
             {
                 "name": "calendar-msg-1", 
-                "message": "Rendelésre változatlanul időpont foglalás szükséges!!!", 
-                "type": "default" 
+                "message": "Rendelésre változatlanul időpont foglalás szükséges!!!"
             },
             {
                 "name": "calendar-msg-2", 
-                "message": "Rendelésre változatlanul időpont foglalás szükséges!!!", 
-                "type": "default" 
+                "message": "Rendelésre változatlanul időpont foglalás szükséges!!!"
             }
         ])
 

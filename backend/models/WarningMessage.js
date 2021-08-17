@@ -12,11 +12,6 @@ const warningMessageSchema = Schema({
     message:{
         type: String,
         required: true,
-    },
-
-    type:{
-        type: String,
-        required: true,
     }
 
 });
