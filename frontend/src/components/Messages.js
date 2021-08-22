@@ -1,68 +1,19 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useContext } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
-import axios from 'axios'
 import UserContext from '../contexts/userContext'
-import UrlContext from '../contexts/urlContext'
+import useMessages from '../hooks/useMessages'
+
 
 function Messages() {
-    const {user, error401Handler} = useContext(UserContext)
-    const [messages, setMessages] = useState()
+
+    const { user, errorHandler } = useContext(UserContext)
     const [newMessage, setNewMessage] = useState("")
-    const [response, setResponse] = useState(false)
-    const [error, setError] = useState(false)
-    const url = useContext(UrlContext)
 
-    useEffect(() => {
-        axios
-            .get(`${url}/messages/byuser/${user.userId}`,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        authorization: `${localStorage.getItem('authorization')}`
-                    },
-                }
-            )
-            .then((res) => {
-                setMessages(res.data)
-            })
-            .catch((err) => {
-                setError(err.response.data.msg)
-                error401Handler(err)
-            })
-    }, [response])
+    const { messages, postNewMessage } = useMessages(user, errorHandler, setNewMessage)
 
-    const postNewMessage = () => {
-        const postMessage = {
-            userId: user.userId,
-            type: "question",
-            userName: user.name,
-            date: new Date(),
-            message: newMessage,
-            creatorId: user.userId
-        }
-
-        axios.post(`${url}/messages/${user.userId}`, postMessage,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    authorization: `${localStorage.getItem('authorization')}`
-                }
-            }
-        )
-            .then((res) => {
-                setResponse(res.data.msg)
-                setNewMessage("")
-                setTimeout(() => {
-                    setResponse(false)
-                }, 2000)
-            })
-            .catch((err) => {
-                setResponse(err)
-            })
-    }
 
     return (
         <>
@@ -79,7 +30,8 @@ function Messages() {
                                     value={newMessage}>
                                 </textarea>
                                 <button className="button" type="submit"
-                                    onClick={postNewMessage}>
+                                    onClick={() =>
+                                        postNewMessage(newMessage)}>
                                     Küldés
                                 </button>
                             </form>
@@ -101,12 +53,6 @@ function Messages() {
                         </div>
                     </Col>
                 </Row>
-                {
-                    error &&
-                    <div className="res-msg res-msg-error">
-                        {error}
-                    </div>
-                }
             </Container>
         </>
     )

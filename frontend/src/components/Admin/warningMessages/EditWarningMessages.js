@@ -1,27 +1,16 @@
-import React, { useState, useEffect, useContext } from 'react'
-import axios from 'axios'
+import React, {  useContext } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
-import UrlContext from '../../../contexts/urlContext'
 import UserContext from '../../../contexts/userContext'
+import useWarningMessages from '../../../hooks/useWarningMessages'
 
 
-function EditWarningMessages() {
-    const [messages, setMessages] = useState(null)
-    const [response, setResponse] = useState(false)
-    const [error, setError] = useState(false)
-    const url = useContext(UrlContext)
-    const { error401Handler } = useContext(UserContext)
+function EditWarningMessages () {
 
-    useEffect(() => {
-        axios
-            .get(`${url}/warning-messages`)
-            .then((res) => {
-                setMessages(res.data)
-            })
-    }, [response])
+    const { successHandler, errorHandler } = useContext(UserContext)
+    const {messages, setMessages, postWarningMessages} = useWarningMessages("-", successHandler, errorHandler)
 
 
     const handleMessageChange = (e) => {
@@ -32,26 +21,6 @@ function EditWarningMessages() {
             : msg));
     }
 
-    
-    const postMessages = () => {
-        axios.post(`${url}/warning-messages`, messages,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    authorization: `${localStorage.getItem('authorization')}`
-                },
-            })
-            .then((res) => {
-                setResponse(res.data.msg)
-                setTimeout(() => {
-                    setResponse(false)
-                }, 2000)
-            })
-            .catch((err) => {
-                setError(err.response.data.msg)
-                error401Handler(err)
-            })
-    }
 
     return (
         <div className="admin-container" >
@@ -83,7 +52,7 @@ function EditWarningMessages() {
                                 </textarea>
                             </div>
                             <div key={messages}>
-                                <button onClick={postMessages}
+                                <button onClick={() => postWarningMessages(messages)}
                                     className="admin-button save-btn">
                                     Mentés
                                 </button>
@@ -116,7 +85,7 @@ function EditWarningMessages() {
                                 </textarea>
                             </div>
                             <div key={messages}>
-                                <button onClick={postMessages}
+                                <button onClick={() => postWarningMessages(messages)}
                                     className="admin-button save-btn">
                                     Mentés
                                 </button>
@@ -124,18 +93,6 @@ function EditWarningMessages() {
                         </div>
                     </Col>
                 </Row>
-                {
-                    response &&
-                    <div className="res-msg res-msg-success">
-                        {response}
-                    </div>
-                }
-                {
-                    error &&
-                    <div className="res-msg res-msg-error">
-                        {error}
-                    </div>
-                }
             </Container>
         </div>
     )

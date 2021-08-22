@@ -1,58 +1,57 @@
 import './App.scss'
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState } from 'react'
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
-import axios from 'axios'
 import Navigation from './components/Navigation'
 import Home from './components/Home'
 import About from './components/About'
 import Infos from './components/Infos'
+import Faq from './components/Faq'
 import Login from './components/Login'
 import Messages from './components/Messages'
 import Calendar from './components/Calendar/Calendar'
 import Admin from './components/Admin'
 import UserContext from './contexts/userContext'
-import UrlContext from './contexts/urlContext'
+import api from './api/createAxiosInstance'
+import useCheckToken from './hooks/useCheckToken'
 
 
 function App() {
-  const [user, setUser] = useState("")
-  const url = useContext(UrlContext)
+  const { user, setUser } = useCheckToken()
+  const [successNotification, setSuccessNotification] = useState(false)
+  const [errorNotification, setErrorNotification] = useState(false)
 
-  const checkToken = () => {
-    const token = localStorage.getItem('authorization')
-    if (token) {
-      axios.get(`${url}/token`,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            authorization: `${localStorage.getItem('authorization')}`
-          },
-        })
-        .then(res => setUser(res.data))
-        .catch(err => {
-          localStorage.removeItem('authorization')
-          setUser()
-        })
-    }
+
+
+  const successHandler = () => {
+    setSuccessNotification("Sikeres mentés!")
+    setTimeout(() => {
+      setSuccessNotification(false)
+    }, 2000)
   }
 
-  const error401Handler = (err) => {
-    if (err.response.status === 401) {
+  const errorHandler = (err) => {
+    console.log(err)
+   if (err?.response || false) {
+      setErrorNotification(err.response.data.msg)
       setTimeout(() => {
-        localStorage.removeItem('authorization')
-        setUser("")
+        setErrorNotification("")
       }, 2000)
     }
+    if (err?.response.status === 401 || false) {
+      logout()
+    }
   }
 
+  const logout = () => {
+    localStorage.removeItem('authorization')
+    api.removeTokenFromAxiosHeader()
+    setUser("")
+  }
 
-  useEffect(() => {
-    checkToken()
-  }, [])
 
   return (
     <Router>
-      <UserContext.Provider value={{ user, setUser, error401Handler }}>
+      <UserContext.Provider value={{ user, setUser, successHandler, errorHandler, logout }}>
         <Navigation />
 
         <Switch>
@@ -66,6 +65,10 @@ function App() {
 
           <Route path='/infos'>
             <Infos></Infos>
+          </Route>
+
+          <Route path='/faq'>
+            <Faq></Faq>
           </Route>
 
           <Route path='/login' >
@@ -98,6 +101,18 @@ function App() {
 
         </Switch>
       </UserContext.Provider>
+      {
+        successNotification &&
+        <div className="res-msg res-msg-success">
+          {successNotification}
+        </div>
+      }
+      {
+        errorNotification &&
+        <div className="res-msg res-msg-error">
+          {errorNotification}
+        </div>
+      }
     </Router>
   );
 }

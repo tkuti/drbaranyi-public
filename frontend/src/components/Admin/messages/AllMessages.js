@@ -87,24 +87,35 @@ function AllMessages() {
                 <Row>
                     <Col sm={12} lg={3}>
                         <div>
-                            <p className="heading">Felhasználók</p>
+                            <p className="heading-admin">
+                                Felhasználók
+                            </p>
                             {
                                 users &&
                                 users.map((user) =>
-                                    <div className="admin-msg-card admin-card" key={user.userId}>
+                                    <div className="admin-msg-card admin-card"
+                                        key={user.userId}>
                                         <div>
-                                            <span className="username">{user.userName}</span>
+                                            <span className="username">
+                                                {user.userName}
+                                            </span>
                                             <span>
                                                 {
                                                     user.lastmessageType === "question"
-                                                        ? <IoIosMail className="incoming-msg"></IoIosMail>
-                                                        : <ImUndo2 className="replied-msg"></ImUndo2>
+                                                        ? <IoIosMail
+                                                            className="incoming-msg">
+                                                        </IoIosMail>
+                                                        : <ImUndo2
+                                                            className="replied-msg">
+                                                        </ImUndo2>
                                                 }
                                             </span>
                                         </div>
                                         <div className="date">
                                             <span>Utolsó:</span>
-                                            <span>{user.newest.slice(0, 10)} ({user.newest.slice(11, 16)})</span>
+                                            <span>{user.newest.slice(0, 10)} 
+                                                ({user.newest.slice(11, 16)})
+                                            </span>
                                         </div>
                                         <button className="admin-button"
                                             onClick={() => {

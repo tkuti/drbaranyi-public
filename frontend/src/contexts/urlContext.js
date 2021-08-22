@@ -1,5 +1,5 @@
 import React from 'react'
 
-const UrlContext = React.createContext("http://localhost:5000/api")
+const UrlContext = React.createContext(process.env.REACT_APP_URL + "/api")
 
 export default UrlContext;

@@ -5,7 +5,6 @@ const requestHandler = (req, res, next) => {
 
     jwt.verify(req.header('authorization'), process.env.JWT_SECRET, async (err, authData) => {
         if (err) {
-            //console.log(err)
             next()
         } else {
             res.locals.user = authData

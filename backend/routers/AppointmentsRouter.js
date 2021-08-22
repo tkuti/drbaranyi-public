@@ -4,6 +4,7 @@ const Appointment = require("../models/Appointment")
 const { checkUser, checkUserAdminRole } = require('../middlewares/checkAuthorization')
 const checkBody = require('../middlewares/checkBody')
 
+
 router.get("/:userId",
     checkUser,
     async (req, res) => {
@@ -99,6 +100,7 @@ router.delete("/:_id",
         res.json({ msg: "Sikeres törlés" })
     }
 )
+
 
 
 module.exports = router;

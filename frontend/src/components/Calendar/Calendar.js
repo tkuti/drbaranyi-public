@@ -10,7 +10,7 @@ import SelectDateOptions from './SelectDateOptions'
 import UserAppointments from './UserAppointments'
 import UserContext from '../../contexts/userContext'
 import UrlContext from '../../contexts/urlContext'
-import { getNext3Weeks, getWeekNumber, setHoursAndMinutes, getNameofDay } from '../../DateHelperFunctions'
+import { getNext3Weeks, getWeekNumber, setHoursAndMinutes, getNameofDay } from '../../api/DateHelperFunctions'
 
 
 function Calendar() {
@@ -19,7 +19,6 @@ function Calendar() {
     const [specialDays, setSpecialDays] = useState()
     const [reservedTimes, setReservedTimes] = useState()
     const [response, setResponse] = useState(false)
-    const [error, setError] = useState(false)
 
     const [actualWeeks, setActualWeeks] = useState()
     const [freeDaysOfWeeks, setFreeDaysOfWeeks] = useState()
@@ -32,7 +31,7 @@ function Calendar() {
 
     const [newBooking, setNewBooking] = useState(false)
 
-    const { user, error401Handler } = useContext(UserContext)
+    const { user, errorHandler } = useContext(UserContext)
     const url = useContext(UrlContext)
 
     const types = { vaccination: "Oltás", generale: "Általános vizsgálat" }
@@ -52,8 +51,7 @@ function Calendar() {
                 setActualWeeks(getNext3Weeks())
             })
             .catch((err) => {
-                setError(err.response.data.msg)
-                error401Handler(err)
+                errorHandler(err)
             })
     }, [])
 
@@ -76,8 +74,7 @@ function Calendar() {
                     setSpecialDays(res.data)
                 })
                 .catch((err) => {
-                    setError(err.response.data.msg)
-                    error401Handler(err)
+                    errorHandler(err)
                 })
         }
     }, [actualWeeks, selectedEvent])
@@ -134,8 +131,7 @@ function Calendar() {
                     setReservedTimes(res.data)
                 })
                 .catch((err) => {
-                    setError(err.response.data.msg)
-                    error401Handler(err)
+                    errorHandler(err)
                 })
         }
 
@@ -212,8 +208,7 @@ function Calendar() {
                 setDescription("")
             })
             .catch((err) => {
-                setError(err.response.data.msg)
-                error401Handler(err)
+                errorHandler(err)
             })
     }
 
@@ -320,12 +315,6 @@ function Calendar() {
                         <UserAppointments key={response}/>
                     </Col>
                 </Row>
-                {
-                    error &&
-                    <div className="res-msg res-msg-error">
-                        {error}
-                    </div>
-                }
             </Container >
         </>
     )

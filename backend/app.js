@@ -38,7 +38,9 @@ app.use('/api/questions', questionsRouter)
 app.use('/api/images', imagesRouter)
 app.use('/api/docs', docsRouter)
 
-
+app.get('/api', (req, res) => {
+    res.json("Hello world")
+})
 
 
 

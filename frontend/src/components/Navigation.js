@@ -9,17 +9,12 @@ import googleIcon from '../images/google-icon.png'
 import UserContext from '../contexts/userContext'
 
 function Navigation() {
-    const {user, setUser} = useContext(UserContext)
+    const {user, logout} = useContext(UserContext)
 
     const googleSignIn = () => {
         window.location.href =
-          "https://accounts.google.com/o/oauth2/v2/auth?response_type=code&prompt=select_account&client_id=365404339212-v2sulc0s0911p86hr1k76c9cj9fokjc3.apps.googleusercontent.com&scope=openid%20profile email&redirect_uri=http%3A//localhost:3000/login"
+          `https://accounts.google.com/o/oauth2/v2/auth?response_type=code&prompt=select_account&client_id=${process.env.REACT_APP_GOOGLE_CLIENT}&scope=openid%20profile email&redirect_uri=${process.env.REACT_APP_GOOGLE_REDIRECT}`
       }
-
-      const logout = () => {
-        localStorage.removeItem('authorization')
-        setUser("")
-       }
 
 
     return (

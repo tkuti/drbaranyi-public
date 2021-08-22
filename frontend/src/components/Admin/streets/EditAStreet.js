@@ -1,13 +1,14 @@
 import React, { useState, useContext } from 'react'
-import axios from 'axios'
-import UrlContext from '../../../contexts/urlContext'
 import UserContext from '../../../contexts/userContext'
+import useStreets from '../../../hooks/useStreets'
 
-function EditAStreet({ street, setResponse, setError }) {
+function EditAStreet({ street, getStreets }) {
+
+    const { errorHandler, successHandler } = useContext(UserContext)
     const [isEditable, setIsEditable] = useState(false)
+    const { updateStreet, deleteStreet } = useStreets(errorHandler, successHandler)
     const [modifiedStreet, setModifiedStreet] = useState(street)
-    const url = useContext(UrlContext)
-    const { error401Handler } = useContext(UserContext)
+
 
     const handleDataChange = (e) => {
         const value = e.target.value;
@@ -15,46 +16,19 @@ function EditAStreet({ street, setResponse, setError }) {
         setModifiedStreet({ ...modifiedStreet, [name]: value });
     }
 
-    const streetUpdate = () => {
-        axios.put(`${url}/streets/${modifiedStreet._id}`, modifiedStreet, {
-            headers: {
-                'Content-Type': 'application/json',
-                authorization: `${localStorage.getItem('authorization')}`
-            },
-        })
-            .then((res) => {
-                setResponse(res.data.msg)
-                setIsEditable(false)
-                setTimeout(() => {
-                    setResponse(false)
-                }, 2000)
-            })
-            .catch((err) => {
-                setError(err.response.data.msg)
-                error401Handler(err)
-            })
+    const handleEditButton = async () => {
+        setIsEditable(!isEditable)
+        if (isEditable) {
+            await updateStreet(modifiedStreet._id, modifiedStreet);
+            getStreets()
+        }
     }
 
-    const streetDelete = () => {
-        axios.delete(`${url}/streets/${street._id}`,
-        {
-            headers: {
-                'Content-Type': 'application/json',
-                authorization: `${localStorage.getItem('authorization')}`
-            },
-        })
-            .then((res) => {
-                setResponse(res.data.msg)
-                setIsEditable(false)
-                setTimeout(() => {
-                    setResponse(false)
-                }, 2000)
-            })
-            .catch((err) => {
-                setError(err.response.data.msg)
-                error401Handler(err)
-            })
+    const handleDeleteButton = async () => {
+        await deleteStreet(street._id)
+        getStreets()
     }
+
 
     return (
         <div className="street">
@@ -85,14 +59,11 @@ function EditAStreet({ street, setResponse, setError }) {
                 className={isEditable ? "active" : ""} />
             <div className="btns">
                 <button className="admin-button save-btn"
-                    onClick={() => {
-                        setIsEditable(!isEditable)
-                        isEditable && streetUpdate()
-                    }}>
+                    onClick={handleEditButton}>
                     {isEditable ? "Mentés" : "Szerkesztés"}
                 </button>
                 <button className="admin-button delete-btn"
-                    onClick={streetDelete}>
+                    onClick={handleDeleteButton}>
                     Törlés
                 </button>
             </div>

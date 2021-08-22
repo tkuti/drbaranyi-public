@@ -1,22 +1,15 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useContext } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
-import axios from 'axios'
-import UrlContext from '../contexts/urlContext'
+import UserContext from '../contexts/userContext'
+import useWarningMessages from '../hooks/useWarningMessages'
 
 function DisplayWarningMessages({type}) {
 
-    const [messages, setMessages] = useState()
-    const url = useContext(UrlContext)
+    const { errorHandler } = useContext(UserContext)
+    const { messages } = useWarningMessages(type, errorHandler)
 
-    useEffect(() => {
-        axios
-            .get(`${url}/warning-messages`)
-            .then((res) => {
-                setMessages(res.data.filter(msg => msg.name.includes(type)))
-            })
-    }, [])
 
     return (
         <Row>

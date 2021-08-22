@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react'
 import axios from 'axios'
 import UserContext from '../../contexts/userContext'
 import UrlContext from '../../contexts/urlContext'
-import { getNameofDay } from '../../DateHelperFunctions'
+import { getNameofDay } from '../../api/DateHelperFunctions'
 
 
 function UserAppointments() {

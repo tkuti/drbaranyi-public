@@ -4,7 +4,7 @@ const WarningMessages = require("../models/WarningMessage")
 const { checkUser, checkUserAdminRole } = require('../middlewares/checkAuthorization')
 
 router.get("/", async (req, res) => {
-
+    console.log("fut messages")
     const messages = await WarningMessages.find()
     res.json(messages)
 });

@@ -27,45 +27,43 @@ function EditNurses() {
     return (
         <div className="admin-container" >
             <Container className="admin-edit-doctors" >
-                <div className="admin-card">
-                    <Row>
-                        <Col>
-                            <p className="heading">Védőnők</p>
-                            <hr />
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col>
-                            {
-                                nurseList &&
-                                nurseList.map((nurse) =>
-                                    <EditANurse
-                                        key={nurse._id}
-                                        nurse={nurse}
-                                        setResponse={setResponse}
-                                        setError={setError}
-                                    ></EditANurse>
-                                )
-                            }
-                            {
-                                newNurse &&
-                                <CreateNewNurse
+                <Row>
+                    <Col>
+                        <p className="heading-admin">Védőnők</p>
+                        <hr />
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                        {
+                            nurseList &&
+                            nurseList.map((nurse) =>
+                                <EditANurse
+                                    key={nurse._id}
+                                    nurse={nurse}
                                     setResponse={setResponse}
-                                    setNewNurse={setNewNurse}
                                     setError={setError}
-                                ></CreateNewNurse>
-                            }
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col>
-                            <button className="admin-button"
-                                onClick={() => setNewNurse(true)}>
-                                Hozzáadás
-                            </button>
-                        </Col>
-                    </Row>
-                </div>
+                                ></EditANurse>
+                            )
+                        }
+                        {
+                            newNurse &&
+                            <CreateNewNurse
+                                setResponse={setResponse}
+                                setNewNurse={setNewNurse}
+                                setError={setError}
+                            ></CreateNewNurse>
+                        }
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                        <button className="admin-button"
+                            onClick={() => setNewNurse(true)}>
+                            Hozzáadás
+                        </button>
+                    </Col>
+                </Row>
                 {
                     response &&
                     <div className="res-msg res-msg-success">

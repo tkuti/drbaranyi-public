@@ -15,6 +15,7 @@ import {
 } from "react-router-dom";
 import AllMessages from './Admin/messages/AllMessages'
 import AdminCalendar from './Admin/calendar/AdminCalendar'
+import AdminFaq from './Admin/faq/AdminFaq'
 import EditWarningMessages from './Admin/warningMessages/EditWarningMessages'
 import EditStreets from './Admin/streets/EditStreets'
 import EditNurses from './Admin/nurses/EditNurses'
@@ -23,6 +24,8 @@ function Admin() {
     let { path, url } = useRouteMatch();
 
     return (
+        <>
+        <div id="background-admin" className="background"></div>
         <Container className="admin">
             <Route exact path={path}>
                 <Row>
@@ -52,8 +55,10 @@ function Admin() {
                         <div className="card-box">
                             <FaQuestionCircle className="admin-icon">
                             </FaQuestionCircle>
-                            <Link to="/admin-faq">
-                                <button className="button">Tanácsok</button>
+                            <Link to={`${url}/edit-faq`}>
+                                <button className="button">
+                                    Tanácsok
+                                </button>
                             </Link>
                         </div>
                     </Col>
@@ -102,6 +107,10 @@ function Admin() {
                     <AdminCalendar />
                 </Route>
 
+                <Route path={`${path}/edit-faq`}>
+                    <AdminFaq />
+                </Route>
+
                 <Route path={`${path}/edit-warning-messages`}>
                     <EditWarningMessages />
                 </Route>
@@ -116,6 +125,7 @@ function Admin() {
 
             </Switch>
         </Container>
+        </>
     )
 }
 

@@ -1,5 +1,5 @@
 import React from 'react'
-import { getNameofDay } from '../../DateHelperFunctions'
+import { getNameofDay } from '../../api/DateHelperFunctions'
 
 
 function SelectDateOptions({ freeDaysOfWeeks }) {

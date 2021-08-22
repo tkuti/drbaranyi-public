@@ -3,34 +3,23 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
-import axios from 'axios'
 import { BiUpArrow, BiDownArrow } from 'react-icons/bi'
-import UrlContext from '../contexts/urlContext'
+import UserContext from '../contexts/userContext'
+import useStreets from '../hooks/useStreets'
+import useNurses from '../hooks/useNurses'
 
 function Infos() {
-    const [streetList, setStreetList] = useState()
-    const [filteredStreetList, setFilteredStreetList] = useState()
+
+    const { errorHandler } = useContext(UserContext)
+    const { streets,
+        filteredStreets,
+        getStreets,
+        setFilteredStreets } = useStreets(errorHandler)
     const [showMore, setShowMore] = useState(false)
-    const [nurseList, setNurseList] = useState()
-    const url = useContext(UrlContext)
+    const { nurses } = useNurses(errorHandler)
 
     useEffect(() => {
-        axios
-            .get(`${url}/streets`)
-            .then((res) => {
-                setStreetList(res.data)
-                setFilteredStreetList(res.data)
-            })
-            .catch(err => console.log(err.response.data.msg))
-    }, [])
-
-    useEffect(() => {
-        axios
-            .get(`${url}/nurses`)
-            .then((res) => {
-                setNurseList(res.data)
-            })
-            .catch(err => console.log(err.response.data.msg))
+        getStreets()
     }, [])
 
     return (
@@ -54,14 +43,14 @@ function Infos() {
                             <div className="card-box search">
                                 <p className="heading">I.sz Házi Gyermekorvosi Körzet</p>
                                 <input type="text" placeholder="Keresés"
-                                    onChange={(e) => setFilteredStreetList(
-                                        streetList.filter(doc =>
+                                    onChange={(e) => setFilteredStreets(
+                                        streets.filter(doc =>
                                             doc.kozterulet.toLowerCase().includes(e.target.value.toLowerCase())))} />
                             </div>
                             <div className="card-box address-container">
                                 {
-                                    filteredStreetList && showMore &&
-                                    filteredStreetList.map((doc, index) =>
+                                    filteredStreets && showMore &&
+                                    filteredStreets.map((doc, index) =>
                                         <p className="address" key={index}>
                                             {doc.kozterulet} {doc.jelleg}
                                             {doc.hsz} ({doc.oldal})
@@ -69,8 +58,8 @@ function Infos() {
                                     )
                                 }
                                 {
-                                    filteredStreetList && !showMore &&
-                                    filteredStreetList.slice(0, 12).map((doc, index) =>
+                                    filteredStreets && !showMore &&
+                                    filteredStreets.slice(0, 12).map((doc, index) =>
                                         <p className="address" key={index}>
                                             {doc.kozterulet} {doc.jelleg} {doc.hsz}
                                             ({doc.oldal})
@@ -79,8 +68,8 @@ function Infos() {
                                 }
                                 <div className="show-more">
                                     {
-                                        filteredStreetList &&
-                                        filteredStreetList.length > 12 &&
+                                        filteredStreets &&
+                                        filteredStreets.length > 12 &&
                                         showMore &&
                                         <>
                                             <hr />
@@ -90,8 +79,8 @@ function Infos() {
                                         </>
                                     }
                                     {
-                                        filteredStreetList &&
-                                        filteredStreetList.length > 12 &&
+                                        filteredStreets &&
+                                        filteredStreets.length > 12 &&
                                         !showMore &&
                                         <>
                                             <hr />
@@ -113,7 +102,7 @@ function Infos() {
                                     </div>
                                 </Col>
                                 {
-                                    nurseList && nurseList.map((dr, i) =>
+                                    nurses && nurses.map((dr, i) =>
                                         <Col sm={12} lg={6} key={i}>
                                             <div className="card-box doctor-card">
                                                 <p className="heading">

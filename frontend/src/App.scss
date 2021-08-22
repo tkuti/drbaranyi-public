@@ -36,6 +36,9 @@ $error-color: #c40b13;
 #background-color4 {
   background-image: url("./images/bg-color4.jpg");
 }
+#background-admin {
+  background-color: $highlightedText;
+}
 
 .navb {
   background-color: $mainColor;
@@ -121,6 +124,13 @@ $error-color: #c40b13;
   font-size: 1.3rem;
   text-align: center;
   color: $highlightedText;
+}
+
+.heading-admin {
+  font-size: 1.3rem;
+  font-weight: 600;
+  text-align: center;
+  color: black;
 }
 
 .warning-message-box {
@@ -325,6 +335,25 @@ $error-color: #c40b13;
     }
   }
 }
+
+.faq {
+  padding-top: 80px;
+  .answer {
+    text-align: justify;
+  }
+  img, iframe {
+    width: 50%;
+    margin: 10px;
+    float: right;
+  }
+
+  button {
+    display: block;
+    width: 90%;
+    margin: 10px auto;
+  }
+}
+
 .messages {
   padding-top: 80px;
   #message {
@@ -418,15 +447,16 @@ $error-color: #c40b13;
     }
   }
 
-  .admin-container {
-    margin: 0;
-    min-height: 100vh;
-    font-size: .95rem;
-    font-weight: 400;
-    background-color: rgba(255, 255, 255, .9);
-    hr {
-      background-color: $mainColor;
-    }
+}
+
+.admin-container {
+  margin: 0;
+  font-size: .95rem;
+  min-height: 85vh;
+  font-weight: 400;
+  //background-color: $mainColor;
+  hr {
+    background-color: $mainColor;
   }
 }
 
@@ -434,19 +464,19 @@ $error-color: #c40b13;
   color: black;
   box-shadow: 0 0 2px black;
   border-radius: 2px;
-  background-color: rgba(223, 223, 223, 0.8);
+  background-color: rgba($mainColor, .5);
   margin: 20px 0;
   padding: 10px;
 }
 
 .admin-button {
-  border-radius: 1px;
+  border-radius: 3px;
   font-weight: 500;
   box-shadow: 0 0 2px grey;
   padding: 5px 10px;
   margin: 2px;
-  background-color: white;
-  border: 1px solid grey;
+  background-color: rgb(253, 249, 223);
+  border: 1nom tepx solid rgb(47, 47, 46);
   &:hover {
     background-color: rgb(143, 142, 142);
   }
@@ -460,7 +490,7 @@ $error-color: #c40b13;
 }
 
 .save-btn {
-  background-color: rgba(59, 121, 139, .8);
+  background-color: rgba(46, 101, 117, 0.8);
   &:hover {
     background-color: rgb(59, 121, 139);
   }
@@ -505,7 +535,7 @@ $error-color: #c40b13;
 
 .admin-calendar {
   max-width: 1400px;
-  padding: 80px 10px 0 10px;
+  padding: 0px 10px 0 10px;
   margin: 0 auto;
   .nav-btns {
     display: flex;
@@ -680,6 +710,51 @@ $error-color: #c40b13;
     }
   }
 } 
+
+.admin-questions {
+  max-width: 1400px;
+  padding: 80px 50px 0 50px;
+  .questions-card {
+
+    button {
+      margin: auto;
+      width: 90%;
+    }
+  }
+  .edit-question {
+    display: flex;
+    flex-direction: column;
+    padding-left: 20px;
+    .edit-heading {
+      color: $highlightedText;
+    }
+    hr {
+      background-color: white;
+      width: 100%;
+    }
+    select {
+      padding:3px 0
+    }
+    .question-images {
+      display: flex;
+      justify-content: space-around;
+    }
+    .question-video {
+      input {
+        width: 100%;
+        margin-bottom: 20px;
+      }
+    }
+    .edit-buttons {
+      margin: 20px 0;
+      display: flex;
+      justify-content: space-around;
+      button {
+        width: 15%;
+      }
+    }
+  }
+}
 
 @media (max-width: 768px) {
   #root {
