@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
@@ -10,8 +10,12 @@ import useQuestions from '../hooks/useQuestions'
 function Faq() {
 
     const { errorHandler } = useContext(UserContext)
-    const { questions } = useQuestions(errorHandler)
+    const { questions, getQuestions } = useQuestions(errorHandler)
     const [selectedQuestion, setSelectedQuestion] = useState("")
+
+    useEffect(() => {
+        getQuestions()
+    }, [])
 
 
     const getVideoId = (link) => {

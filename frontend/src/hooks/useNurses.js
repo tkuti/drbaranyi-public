@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import api from '../api/createAxiosInstance'
 
-function useNurses ( errorHandler) {
+function useNurses ( errorHandler, successHandler, setNewNurse) {
 
     const [nurses, setNurses] = useState()
 
@@ -15,14 +15,38 @@ function useNurses ( errorHandler) {
                 errorHandler(err)
             })
 
+            
+    const postNurse = async (nurse) => {
+        try {
+            await api.postNurse(nurse)
+            setNewNurse(false)
+            successHandler()
+        } catch (err) {
+            errorHandler(err)
+        }
+    }
 
-    useEffect(() => {
-        getNurses()
-    }, [])
+    const updateNurse = async (nurseId, nurse) => {
 
+        try {
+            await api.updateNurse(nurseId, nurse)
+            successHandler()
+        } catch (err) {
+            errorHandler(err)
+        }
+    }
 
+    
+    const deleteNurse = async (nurseId) => {
+        try {
+            await api.deleteNurse(nurseId)
+            successHandler()
+        } catch (err) {
+            errorHandler(err)
+        }
+    }
 
-    return { nurses }
+    return { nurses, getNurses, postNurse, updateNurse, deleteNurse }
 }
 
 export default useNurses

@@ -2,110 +2,68 @@ import React, { useState, useEffect, useContext } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
-import axios from 'axios'
 import NewReservation from './NewReservation'
 import DisplayReservation from './DisplayReservation'
 import SpecialDaySelector from './SpecialDaySelector'
 import TimeListing from './TimeListing'
 import { AiTwotoneEdit, AiOutlineEdit } from 'react-icons/ai'
-import UrlContext from '../../../contexts/urlContext'
+import UserContext from '../../../contexts/userContext'
 import { getACertainFullWeek, getWeekNumber } from '../../../api/DateHelperFunctions'
+import useConsultingHours from '../../../hooks/useConsultingHours'
+import useSpecialDays from '../../../hooks/useSpecialDays'
+import useAppointments from '../../../hooks/useAppointments'
 
 
 function AdminCalendar() {
 
-    const nameOfDays = ["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"]
-    const [consultingHours, setConsultingHours] = useState()
-    const [appointments, setAppointments] = useState()
-    const [specialDays, setSpecialDays] = useState()
+    const {errorHandler, successHandler } = useContext(UserContext)
+    const {consultingHours} = useConsultingHours(errorHandler)
+    const {specialDays, getSpecialDays, postSpecialDay} = useSpecialDays(errorHandler,successHandler)
+    const {appointments, getAppointments} = useAppointments(errorHandler, successHandler)
     const [actualWeek, setActualWeek] = useState()
-    const [response, setResponse] = useState(false)
-    const [error, setError] = useState(false)
 
     const [focus, setFocus] = useState(new Date().getDay() - 1)
     const [relativeDate, setRelativeDate] = useState(new Date())
-
+    
     const [newReservation, setNewReservation] = useState(false)
     const [displayReservation, setDisplayReservation] = useState(false)
-    const [newSpecialDay, setNewSpecialDay] = useState()
 
+    
     const [selectedTime, setSelectedTime] = useState()
-    const url = useContext(UrlContext)
+    const nameOfDays = ["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"]
 
 
     useEffect(() => {
-        axios
-            .get(`${url}/consulting-hours`,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        authorization: `${localStorage.getItem('authorization')}`,
-                    },
-                })
-            .then((res) => {
-                setConsultingHours(res.data)
-                setActualWeek(getACertainFullWeek(new Date()))
-            })
-            .catch((err) => {
-                setError(err.response.data.msg)
-            })
+        setActualWeek(getACertainFullWeek(new Date()))
     }, [])
 
 
     useEffect(() => {
 
-        actualWeek &&
-            axios
-                .get(`${url}/special-days/${actualWeek[0]}/${actualWeek[6]}`,
-                    {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            authorization: `${localStorage.getItem('authorization')}`,
-                        },
-                    })
-                .then((res) => {
-                    setSpecialDays(res.data)
-                })
-    }, [actualWeek, response, newSpecialDay])
+        if (actualWeek) {
+            getSpecialDays(actualWeek[0], actualWeek[6])
+        }
+
+    }, [actualWeek])
 
 
     useEffect(() => {
-        actualWeek &&
-            axios
-                .get(`${url}/appointments/byInterval/${actualWeek[0]}/${actualWeek[6]}`,
-                    {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            authorization: `${localStorage.getItem('authorization')}`,
-                        },
-                    }
-                )
-                .then((res) => {
-                    const apps = res.data.map(app => app.day.length > 10 ? { ...app, day: app.day.slice(0, 10) } : app)
-                    setAppointments(apps)
-                })
+        
+        if (actualWeek) {
+            getAppointments(actualWeek[0], actualWeek[6])
+        }
+        
     }, [actualWeek, newReservation, displayReservation])
 
 
-    const postSpecialDay = (day, type) => {
-        const newSpecialDay = {
+    const sendSpecialDay = async (day, type) => {
+        const specialDay = {
             day: new Date(day),
             type: type,
             newDay: isSpecialDay(day)
         }
-        axios.post(`${url}/special-days`, newSpecialDay,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    authorization: `${localStorage.getItem('authorization')}`,
-                },
-            })
-            .then((res) => {
-                setResponse(res.data.success)
-                setTimeout(() => {
-                    setResponse(false)
-                }, 2000)
-            })
+        await postSpecialDay(specialDay)
+        getSpecialDays(actualWeek[0], actualWeek[6])
     }
 
 
@@ -184,7 +142,6 @@ function AdminCalendar() {
                         <NewReservation
                             setNewReservation={setNewReservation}
                             selectedTime={selectedTime}
-                            setResponse={setResponse}
                         ></NewReservation>
                     }
                     {
@@ -195,7 +152,6 @@ function AdminCalendar() {
                             selectedEvent={appointments.find(app =>
                                 app.day === selectedTime.day
                                 && app.time === selectedTime.time)}
-                            setResponse={setResponse}
                         ></DisplayReservation>
                     }
                 </Col>
@@ -244,8 +200,8 @@ function AdminCalendar() {
                                                         ? false
                                                         : true}
                                                 onChange={(e) => e.target.checked
-                                                    ? postSpecialDay(weekday, "active")
-                                                    : postSpecialDay(weekday, "inactive")
+                                                    ? sendSpecialDay(weekday, "active")
+                                                    : sendSpecialDay(weekday, "inactive")
                                                 } />
                                         </button>
                                     }
@@ -255,7 +211,8 @@ function AdminCalendar() {
                                     && <SpecialDaySelector
                                         weekday={weekday}
                                         isInactive={isInactive}
-                                        setNewSpecialDay={setNewSpecialDay}>
+                                        actualWeek={actualWeek}
+                                        getSpecialDays={getSpecialDays}>
                                     </SpecialDaySelector>
                                 }
                                 <hr />
@@ -276,6 +233,7 @@ function AdminCalendar() {
                                             .map((day) =>
                                                 day.hours.map((time, index) =>
                                                     <TimeListing
+                                                        key={index}
                                                         weekday={weekday}
                                                         i={i}
                                                         time={time}
@@ -296,18 +254,6 @@ function AdminCalendar() {
                     }
                 </Col>
             </Row>
-            {
-                response &&
-                <div className="res-msg res-msg-success">
-                    {response}
-                </div>
-            }
-            {
-                error &&
-                <div className="res-msg res-msg-error">
-                    {error}
-                </div>
-            }
         </div>
     )
 }

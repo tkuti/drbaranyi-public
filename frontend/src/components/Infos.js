@@ -16,10 +16,11 @@ function Infos() {
         getStreets,
         setFilteredStreets } = useStreets(errorHandler)
     const [showMore, setShowMore] = useState(false)
-    const { nurses } = useNurses(errorHandler)
+    const { nurses, getNurses } = useNurses(errorHandler)
 
     useEffect(() => {
         getStreets()
+        getNurses()
     }, [])
 
     return (

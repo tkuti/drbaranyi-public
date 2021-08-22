@@ -3,22 +3,24 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
-import axios from 'axios'
 import DisplayWarningMessages from '../DisplayWarningMessages'
 import CalendarText from './CalendarText'
 import SelectDateOptions from './SelectDateOptions'
 import UserAppointments from './UserAppointments'
 import UserContext from '../../contexts/userContext'
-import UrlContext from '../../contexts/urlContext'
+import useConsultingHours from '../../hooks/useConsultingHours'
+import useSpecialDays from '../../hooks/useSpecialDays'
+import useAppointments from '../../hooks/useAppointments'
 import { getNext3Weeks, getWeekNumber, setHoursAndMinutes, getNameofDay } from '../../api/DateHelperFunctions'
 
 
 function Calendar() {
 
-    const [consultingHours, setConsultingHours] = useState()
-    const [specialDays, setSpecialDays] = useState()
-    const [reservedTimes, setReservedTimes] = useState()
-    const [response, setResponse] = useState(false)
+    const { user, errorHandler, successHandler } = useContext(UserContext)
+    const { consultingHours } = useConsultingHours(errorHandler)
+    const { specialDays, getSpecialDays } = useSpecialDays(errorHandler)
+
+    const { reservedTimes, getReservedTimesByDate, postAppointment } = useAppointments(errorHandler, successHandler)
 
     const [actualWeeks, setActualWeeks] = useState()
     const [freeDaysOfWeeks, setFreeDaysOfWeeks] = useState()
@@ -31,28 +33,11 @@ function Calendar() {
 
     const [newBooking, setNewBooking] = useState(false)
 
-    const { user, errorHandler } = useContext(UserContext)
-    const url = useContext(UrlContext)
-
     const types = { vaccination: "Oltás", generale: "Általános vizsgálat" }
 
 
     useEffect(() => {
-        axios
-            .get(`${url}/consulting-hours`,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        authorization: `${localStorage.getItem('authorization')}`
-                    },
-                })
-            .then((res) => {
-                setConsultingHours(res.data)
-                setActualWeeks(getNext3Weeks())
-            })
-            .catch((err) => {
-                errorHandler(err)
-            })
+        setActualWeeks(getNext3Weeks())
     }, [])
 
 
@@ -60,22 +45,7 @@ function Calendar() {
         if (actualWeeks) {
             const startDate = actualWeeks[0][0]
             const endDate = actualWeeks[3][5]
-
-            axios
-                .get(`${url}/special-days/${startDate}/${endDate}`,
-                    {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            authorization: `${localStorage.getItem('authorization')}`,
-                        },
-                    }
-                )
-                .then((res) => {
-                    setSpecialDays(res.data)
-                })
-                .catch((err) => {
-                    errorHandler(err)
-                })
+            getSpecialDays(startDate, endDate)
         }
     }, [actualWeeks, selectedEvent])
 
@@ -115,26 +85,9 @@ function Calendar() {
 
 
     useEffect(() => {
-
         if (selectedDate) {
-
-            axios
-                .get(`${url}/appointments/listTimesByDate/${selectedDate}`,
-                    {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            authorization: `${localStorage.getItem('authorization')}`,
-                        },
-                    }
-                )
-                .then((res) => {
-                    setReservedTimes(res.data)
-                })
-                .catch((err) => {
-                    errorHandler(err)
-                })
+            getReservedTimesByDate(selectedDate)
         }
-
     }, [selectedDate])
 
 
@@ -142,7 +95,7 @@ function Calendar() {
 
         if (selectedDate && reservedTimes) {
 
-            
+
             //set all consulting hours of the selected date
             let hoursOfSelectedDate
 
@@ -181,7 +134,8 @@ function Calendar() {
     }, [reservedTimes])
 
 
-    const postNewAppointment = () => {
+    const sendNewAppointment = async () => {
+
         const newAppointment = {
             userId: user.userId,
             userName: user.name,
@@ -191,25 +145,14 @@ function Calendar() {
             day: new Date(selectedDate),
             time: selectedTime
         }
-        axios.post(`${url}/appointments`, newAppointment,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    authorization: `${localStorage.getItem('authorization')}`,
-                }
-            }
-        )
-            .then((res) => {
-                setResponse(res.data.msg)
-                setNewBooking(false)
-                setSelectedEvent("")
-                setSelectedDate("")
-                setSelectedTime("")
-                setDescription("")
-            })
-            .catch((err) => {
-                errorHandler(err)
-            })
+
+        await postAppointment(newAppointment)
+
+        setNewBooking(false)
+        setSelectedEvent("")
+        setSelectedDate("")
+        setSelectedTime("")
+        setDescription("")
     }
 
 
@@ -237,8 +180,8 @@ function Calendar() {
                                         {
                                             selectedDate &&
                                             <p className="date">
-                                                {selectedDate}
-                                                ({getNameofDay(selectedDate)})
+                                                {selectedDate}&nbsp;
+                                                ({getNameofDay(selectedDate)})&nbsp;
                                                 {selectedTime}</p>
                                         }
                                         {
@@ -294,7 +237,7 @@ function Calendar() {
                                                 <button className="button"
                                                     disabled={description.length > 3
                                                         ? false : true}
-                                                    onClick={postNewAppointment}>
+                                                    onClick={sendNewAppointment}>
                                                     Foglalás
                                                 </button>
                                             </>
@@ -312,7 +255,10 @@ function Calendar() {
                                     </>
                             }
                         </div>
-                        <UserAppointments key={response}/>
+                        {
+                            !newBooking &&
+                            <UserAppointments />
+                        }
                     </Col>
                 </Row>
             </Container >

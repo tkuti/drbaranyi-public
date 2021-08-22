@@ -1,29 +1,17 @@
 import React, { useContext } from 'react'
-import axios from 'axios'
-import UrlContext from '../../../contexts/urlContext'
+import UserContext from '../../../contexts/userContext'
+import useAppointments from '../../../hooks/useAppointments'
 
-function DisplayReservation({ setDisplayReservation, selectedTime, selectedEvent, setResponse }) {
+function DisplayReservation({ setDisplayReservation, selectedTime, selectedEvent}) {
 
-    const url = useContext(UrlContext)
+    const {errorHandler, successHandler } = useContext(UserContext)
+    const {deleteAppointment} = useAppointments(errorHandler, successHandler)
 
     const types = { vaccination: "Oltás", generale: "Általános vizsgálat", pause: "Szünet" }
 
-    const deleteAppointment = () => {
-        axios.delete(`${url}/appointments/${selectedEvent._id}`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    authorization: `${localStorage.getItem('authorization')}`,
-                }
-            }
-        )
-            .then((res) => {
-                setResponse(res.data.msg)
-                setDisplayReservation(false)
-                setTimeout(() => {
-                    setResponse(false)
-                }, 2000)
-            })
+    const handleDeleteButton = async () => {
+        await deleteAppointment(selectedEvent._id)
+        setDisplayReservation(false)
     }
 
     return (
@@ -40,7 +28,7 @@ function DisplayReservation({ setDisplayReservation, selectedTime, selectedEvent
                 </div>
                 <div className="buttons">
                     <button className="admin-button delete-btn"
-                        onClick={deleteAppointment}>
+                        onClick={handleDeleteButton}>
                         Törlés
                     </button>
                     <button className="admin-button"

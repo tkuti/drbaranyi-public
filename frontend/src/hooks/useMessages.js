@@ -1,13 +1,14 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import api from '../api/createAxiosInstance'
 
-function useMessages(user, errorHandler, setNewMessage) {
+function useMessages( errorHandler) {
 
     const [messages, setMessages] = useState()
+    const [lastMessagesByUsers, setLastMessagesByUsers] = useState()
 
 
-    const getMessages =  () =>
-        api.getMessagesByUser(user.userId)
+    const getMessages =  (userId) =>
+        api.getMessagesByUser(userId)
             .then((res) => {
                 setMessages(res.data)
             })
@@ -16,35 +17,31 @@ function useMessages(user, errorHandler, setNewMessage) {
             })
 
 
-    const postNewMessage = async (message) => {
+    const getLastMessagesByUsers =  () =>
+        api.getLastMessagesByUsers()
+            .then((res) => {
+                setLastMessagesByUsers(res.data)
+            })
+            .catch((err) => {
+                errorHandler(err)
+            })
 
-        const newMessage = {
-            userId: user.userId,
-            type: "question",
-            userName: user.name,
-            date: new Date(),
-            message: message,
-            creatorId: user.userId
-        }
+
+            
+    const postNewMessage = async (userId,newMessage) => {
 
         try {
-            await api.postMessage(user.userId, newMessage)
-            await getMessages()
-            setNewMessage("")
+            await api.postMessage(userId, newMessage)
+            await getMessages(userId)
         } catch (err) {
             errorHandler(err)
         }
 
     }
 
-    useEffect(() => {
-        getMessages()
-    }, [])
 
 
-
-
-    return { messages, postNewMessage }
+    return { messages,  getMessages, lastMessagesByUsers, getLastMessagesByUsers,  postNewMessage }
 }
 
 export default useMessages

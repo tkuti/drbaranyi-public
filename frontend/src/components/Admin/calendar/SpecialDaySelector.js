@@ -1,57 +1,34 @@
-import React, { useState, useEffect, useContext } from 'react'
-import axios from 'axios'
-import UrlContext from '../../../contexts/urlContext'
+import React, { useEffect, useContext } from 'react'
+import UserContext from '../../../contexts/userContext'
+import useSpecialDays from '../../../hooks/useSpecialDays'
 
-function SpecialDaySelector ({ weekday, isInactive, setNewSpecialDay }) {
-    
-    const [newDay, setNewDay] = useState(false)
-    const url = useContext(UrlContext)
-    const [error, setError] = useState(false)
+function SpecialDaySelector({ weekday, isInactive, actualWeek, getSpecialDays }) {
+
+    const { errorHandler, successHandler } = useContext(UserContext)
+    const { specialDay, getSpecialDay, postSpecialDay } = useSpecialDays(errorHandler, successHandler)
+
 
     useEffect(() => {
-        axios
-            .get(`${url}/special-days/${weekday}`, 
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    authorization: `${localStorage.getItem('authorization')}`,
-                }
-            })
-            .then((res) => {
-                res.data ? setNewDay(res.data.newDay) : setNewDay(null)
-                
-            })
-    }, []) 
+        getSpecialDay(weekday)
+    }, [])
 
 
-    const postSpecialDay = (newDay, type) => {
+    const sendSpecialDay = async (newDay, type) => {
         const newSpecialDay = {
             day: new Date(weekday),
             type: type ? "inactive" : "active",
             newDay: newDay
         }
-
-        axios.post(`${url}/special-days`, newSpecialDay,
-        {
-            headers: {
-                'Content-Type': 'application/json',
-                authorization: `${localStorage.getItem('authorization')}`,
-            }
-        })
-            .then((res) => {
-                setNewSpecialDay(Date.now())
-            })
-            .catch((err) => {
-                setError(err.response.data.msg)
-            })
+        await postSpecialDay(newSpecialDay)
+        getSpecialDays(actualWeek[0], actualWeek[6])
     }
 
     return (
-        <div key={newDay} className="special-day-select">
+        <div key={specialDay} className="special-day-select">
             <select name="newDay" id="newDay"
-                defaultValue={newDay}
-                onChange={(e) => 
-                postSpecialDay(e.target.value, isInactive(weekday))}>
+                defaultValue={specialDay}
+                onChange={(e) =>
+                    sendSpecialDay(e.target.value, isInactive(weekday))}>
                 <option value="none">-</option>
                 <option value="Hétfő">Hétfő</option>
                 <option value="Kedd">Kedd</option>
@@ -60,12 +37,6 @@ function SpecialDaySelector ({ weekday, isInactive, setNewSpecialDay }) {
                 <option value="Péntek1">Péntek(1)</option>
                 <option value="Péntek2">Péntek(2)</option>
             </select>
-            {
-                    error &&
-                    <div className="res-msg res-msg-error">
-                        {error}
-                    </div>
-                }
         </div>
     )
 }

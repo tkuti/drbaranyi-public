@@ -1,37 +1,20 @@
-import React, { useState, useEffect, useContext } from 'react'
-import axios from 'axios'
-import UrlContext from '../../../contexts/urlContext'
+import React, { useState, useContext } from 'react'
+import UserContext from '../../../contexts/userContext'
+import useAppointments from '../../../hooks/useAppointments'
+import useUsers from '../../../hooks/useUsers'
 
-function AdminNewReservation({ setNewReservation, selectedTime, setResponse }) {
+function AdminNewReservation({ setNewReservation, selectedTime }) {
 
-    const [users, setUsers] = useState()
-    const [selectedUser, setSelectedUser] = useState({
-        userId: "110748397229408922403", 
-        userName: "Judit Baranyi", 
-        email: "baranyi1968@gmail.com",
-    })
+    const { errorHandler, successHandler } = useContext(UserContext)
+    const { postAppointment } = useAppointments(errorHandler, successHandler)
+    const {users} = useUsers(errorHandler)
+
+    const [selectedUser, setSelectedUser] = useState()
     const [childName, setChildName] = useState("")
     const [selectedEvent, setSelectedEvent] = useState("")
-    const url = useContext(UrlContext)
-
-    
-    useEffect(() => {
-        axios
-            .get(`${url}/users`,  
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    authorization: `${localStorage.getItem('authorization')}`
-                }
-            }
-            )
-            .then((res) => {
-                setUsers(res.data)
-            })
-    }, [])
 
 
-    const postNewAppointment = () => {
+    const sendNewAppointment = async () => {
         const newAppointment = {
             userId: selectedUser.userId,
             userName: selectedUser.name,
@@ -41,21 +24,8 @@ function AdminNewReservation({ setNewReservation, selectedTime, setResponse }) {
             day: new Date(selectedTime.day),
             time: selectedTime.time
         }
-        axios.post(`${url}/appointments`, newAppointment,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    authorization: `${localStorage.getItem('authorization')}`,
-                },
-            }
-        )
-            .then((res) => {
-                setResponse(res.data.msg)
-                setNewReservation(false)
-                setTimeout(() => {
-                    setResponse(false)
-                }, 2000)
-            })
+        await postAppointment(newAppointment)
+        setNewReservation(false)
     }
 
     return (
@@ -63,10 +33,9 @@ function AdminNewReservation({ setNewReservation, selectedTime, setResponse }) {
             <h4>Új foglalás</h4>
             <p className="date">{`${selectedTime.day} (${selectedTime.time})`}</p>
             <div className="form">
-                <select name="users" id="users" 
-                onChange={(e) => setSelectedUser(users.find(user =>
-                    user.userId === e.target.value))}>
-                    <option value="110748397229408922403">Judit Baranyi</option>
+                <select name="users" id="users"
+                    onChange={(e) => setSelectedUser(users.find(user =>
+                        user.userId === e.target.value))}>
                     {
                         users &&
                         users.map((user, i) =>
@@ -86,16 +55,16 @@ function AdminNewReservation({ setNewReservation, selectedTime, setResponse }) {
             </div>
             <div className="buttons">
                 <button className="admin-button save-btn"
-                    disabled={selectedUser && childName && selectedEvent ? false : true}
-                    onClick={postNewAppointment}
-                >
+                    disabled={selectedUser && childName && selectedEvent
+                        ? false : true}
+                    onClick={sendNewAppointment}>
                     Mentés
-                    </button>
+                </button>
                 <button className="admin-button"
-                    onClick={(e) => setNewReservation(false)}
-                >Mégse</button>
+                    onClick={(e) => setNewReservation(false)}>
+                    Mégse
+                </button>
             </div>
-
         </div>
     )
 }

@@ -1,10 +1,11 @@
 import React, { useContext } from 'react'
-import axios from 'axios'
-import UrlContext from '../../../contexts/urlContext'
+import UserContext from '../../../contexts/userContext'
+import useQuestions from '../../../hooks/useQuestions'
 
-function AdminFaqEdit({ selectedQuestion, setSelectedQuestion, images, setResponse }) {
+function AdminFaqEdit({ selectedQuestion, setSelectedQuestion, images, getQuestions }) {
 
-    const url = useContext(UrlContext)
+    const { successHandler, errorHandler } = useContext(UserContext)
+    const { updateQuestion, deleteQuestion } = useQuestions(errorHandler, successHandler)
 
 
     const handleDataChange = (e) => {
@@ -21,48 +22,19 @@ function AdminFaqEdit({ selectedQuestion, setSelectedQuestion, images, setRespon
         }
     }
 
-
-    const updateQuestion = () => {
-
-        axios.put(`${url}/questions/${selectedQuestion._id}`, selectedQuestion,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    authorization: `${localStorage.getItem('authorization')}`
-                },
-            })
-            .then((res) => {
-                setResponse(res.data.msg)
-                setSelectedQuestion("")
-                setTimeout(() => {
-                    setResponse(false)
-                }, 2000)
-            })
-            .catch((err) => {
-                setResponse(err.response.data.msg)
-            })
+    const handleSaveButton = async () => {
+        await updateQuestion(selectedQuestion._id, selectedQuestion)
+        setSelectedQuestion("")
+        getQuestions()
     }
 
-
-    const deleteQuestion = () => {
-        axios.delete(`${url}/questions/${selectedQuestion._id}`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    authorization: `${localStorage.getItem('authorization')}`
-                },
-            })
-            .then((res) => {
-                setResponse(res.data.msg)
-                setSelectedQuestion("")
-                setTimeout(() => {
-                    setResponse(false)
-                }, 2000)
-            })
-            .catch((err) => {
-                setResponse(err.response.data.msg)
-            })
+    
+    const handleDeleteButton = async () => {
+        await deleteQuestion(selectedQuestion._id)
+        setSelectedQuestion("")
+        getQuestions()
     }
+
 
     return (
         <div className="edit-question">
@@ -120,11 +92,11 @@ function AdminFaqEdit({ selectedQuestion, setSelectedQuestion, images, setRespon
             </div>
             <div className="edit-buttons">
                 <button className="admin-button save-btn"
-                    onClick={updateQuestion}>
+                    onClick={handleSaveButton}>
                     Mentés
                 </button>
                 <button className="admin-button delete-btn"
-                    onClick={deleteQuestion}>
+                    onClick={handleDeleteButton}>
                     Törlés
                 </button>
             </div>

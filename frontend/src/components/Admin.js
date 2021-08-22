@@ -6,11 +6,9 @@ import Col from 'react-bootstrap/Col'
 import { BiMessageDetail } from 'react-icons/bi'
 import { FaRegCalendarAlt, FaRegEdit, FaQuestionCircle } from 'react-icons/fa'
 import {
-    BrowserRouter as Router,
     Switch,
     Route,
     Link,
-    useParams,
     useRouteMatch
 } from "react-router-dom";
 import AllMessages from './Admin/messages/AllMessages'

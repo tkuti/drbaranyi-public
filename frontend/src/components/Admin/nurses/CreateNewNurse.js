@@ -1,33 +1,17 @@
 import React, { useState, useContext } from 'react'
-import axios from 'axios'
-import UrlContext from '../../../contexts/urlContext'
 import UserContext from '../../../contexts/userContext'
+import useNurses from '../../../hooks/useNurses'
 
-function CreateNewNurse({ setResponse, setNewNurse, setError }) {
+function CreateNewNurse({ setNewNurse, getNurses }) {
+    
+    const { errorHandler, successHandler } = useContext(UserContext)
     const [name, setName] = useState()
     const [phone, setPhone] = useState()
-    const url = useContext(UrlContext)
-    const { error401Handler } = useContext(UserContext)
+    const { postNurse } = useNurses(errorHandler, successHandler, setNewNurse)
 
-    const doctorInsert = () => {
-        axios.post(`${url}/nurses`, { name: name, phone: phone },
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    authorization: `${localStorage.getItem('authorization')}`
-                },
-            })
-            .then((res) => {
-                setResponse(res.data.msg)
-                setNewNurse(false)
-                setTimeout(() => {
-                    setResponse(false)
-                }, 2000)
-            })
-            .catch((err) => {
-                setError(err.response.data.msg)
-                error401Handler(err)
-            })
+    const sendNurse = async () => {
+        await postNurse({ name: name, phone: phone })
+        getNurses()
     }
 
     return (
@@ -41,7 +25,7 @@ function CreateNewNurse({ setResponse, setNewNurse, setError }) {
             <div className="btns">
                 <button className="admin-button save-btn"
                     disabled={name && phone ? false : true}
-                    onClick={doctorInsert}>
+                    onClick={sendNurse}>
                     Mentés
                 </button>
                 <button className="admin-button"

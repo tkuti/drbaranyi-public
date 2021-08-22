@@ -16,6 +16,7 @@ const imagesRouter = require('./routers/ImagesRouter')
 const docsRouter = require('./routers/DocsRouter')
 
 const requestHandler = require('./middlewares/requestHandler')
+const errorHandler = require('./middlewares/errorHandler')
 
 
 app.use(cors())
@@ -41,6 +42,8 @@ app.use('/api/docs', docsRouter)
 app.get('/api', (req, res) => {
     res.json("Hello world")
 })
+
+app.use(errorHandler)
 
 
 

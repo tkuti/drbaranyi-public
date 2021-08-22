@@ -3,7 +3,7 @@ import axios from 'axios'
 const createInstance = () => {
 
     const instance = axios.create({
-        baseURL: 'http://localhost:5000/api',
+        baseURL: `${process.env.REACT_APP_URL}/api`,
         headers: {
             'Content-Type': 'application/json',
             'authorization': `${localStorage.getItem('authorization')}`
@@ -63,9 +63,46 @@ const createInstance = () => {
         .get(`/nurses`)
     }
 
+    const postNurse = ( nurse ) => {
+        return instance.post(`/nurses`, nurse)
+    }
+
+    const updateNurse = (nurseId, nurse) => {
+        return instance
+        .put(`/nurses/${nurseId}`, nurse)
+    }
+
+    const deleteNurse = (nurseId) => {
+        return instance
+        .delete(`/nurses/${nurseId}`)
+    }
+
     const getQuestions = () => {
         return instance
         .get(`/questions`)
+    }
+
+    const postQuestion = ( question ) => {
+        return instance.post(`/questions`, question)
+    }
+
+    const updateQuestion = (questionId, question) => {
+        return instance
+        .put(`/questions/${questionId}`, question)
+    }
+
+    const deleteQuestion = (questionId) => {
+        return instance
+        .delete(`/questions/${questionId}`)
+    }
+
+    const getImages = () => {
+        return instance
+        .get(`/images`)
+    }
+
+    const postImage = ( image ) => {
+        return instance.post(`/images`, image)
     }
 
     const getMessagesByUser = (userId) => {
@@ -73,13 +110,66 @@ const createInstance = () => {
         .get(`/messages/byuser/${userId}`)
     }
 
+    const getLastMessagesByUsers = () => {
+        return instance
+        .get(`/messages/lastMessageByUsers`)
+    }
+
     const postMessage = (userId, message) => {
         return instance.post(`/messages/${userId}`, message)
     }
 
+    const getConsultingHours = () => {
+        return instance
+        .get(`/consulting-hours`)
+    }
+
+    const getSpecialDay = (date) => {
+        return instance
+        .get(`/special-days/${date}`)
+    }
+
+    const getSpecialDays = (startDate, endDate) => {
+        return instance
+        .get(`/special-days/${startDate}/${endDate}`)
+    }
+
+    const postSpecialDay = (specialDay) => {
+        return instance.post(`/special-days`, specialDay)
+    }
+
+    const getAppointments = (startDate, endDate) => {
+        return instance
+        .get(`/appointments/byInterval/${startDate}/${endDate}`)
+    }
+
+    const getAppointmentsByUser = (userId) => {
+        return instance
+        .get(`/appointments/${userId}`)
+    }
+
+    const getReservedTimesByDate = (date) => {
+        return instance
+        .get(`/appointments/listTimesByDate/${date}`)
+    }
+
+    const postAppointment = (appointment) => {
+        return instance.post(`/appointments/`, appointment)
+    }
+
+    const deleteAppointment = (appointmentId) => {
+        return instance
+        .delete(`/appointments/${appointmentId}`)
+    }
+
+    const getUsers = () => {
+        return instance
+        .get(`/users`)
+    }
+
     return { 
-        setTokenInAxiosHeader, removeTokenFromAxiosHeader, checkJwtToken, login, getWarningMessages, postWarningMessages, getStreets, postStreet, updateStreet, deleteStreet, getNurses, getQuestions, 
-        getMessagesByUser, postMessage }
+        setTokenInAxiosHeader, removeTokenFromAxiosHeader, checkJwtToken, login, getWarningMessages, postWarningMessages, getStreets, postStreet, updateStreet, deleteStreet, getNurses, postNurse, updateNurse, deleteNurse, getQuestions, postQuestion, updateQuestion, deleteQuestion, getImages, postImage,  
+        getMessagesByUser, getLastMessagesByUsers, postMessage, getConsultingHours, getSpecialDay, getSpecialDays, postSpecialDay, getAppointments, getAppointmentsByUser, getReservedTimesByDate, postAppointment, deleteAppointment, getUsers }
 }
 
 export default createInstance()

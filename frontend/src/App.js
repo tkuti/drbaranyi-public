@@ -37,7 +37,7 @@ function App() {
         setErrorNotification("")
       }, 2000)
     }
-    if (err?.response.status === 401 || false) {
+    if (err?.response?.status === 401 || false) {
       logout()
     }
   }

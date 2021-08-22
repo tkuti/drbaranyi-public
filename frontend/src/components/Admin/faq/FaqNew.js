@@ -1,17 +1,16 @@
 import React, { useState, useContext } from 'react'
-import axios from 'axios'
-import UrlContext from '../../../contexts/urlContext'
+import UserContext from '../../../contexts/userContext'
+import useQuestions from '../../../hooks/useQuestions'
 
-function AdminFaqNew({ images, setNewQuestion, setResponse }) {
-
+function AdminFaqNew({ images, setNewQuestion, getQuestions }) {
+    const { successHandler, errorHandler } = useContext(UserContext)
+    const { postQuestion } = useQuestions(errorHandler, successHandler, setNewQuestion)
     const [question, setQuestion] = useState({
         question: "",
         answer: "",
         img: ["", ""],
         video: ""
     })
-    const url = useContext(UrlContext)
-
 
     const handleDataChange = (e) => {
         if (e.target.name.includes("img")) {
@@ -24,24 +23,9 @@ function AdminFaqNew({ images, setNewQuestion, setResponse }) {
         }
     }
 
-    const insertNewQuestion = () => {
-        axios.post(`${url}/questions`, question,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    authorization: `${localStorage.getItem('authorization')}`
-                },
-            })
-            .then((res) => {
-                setResponse(res.data.msg)
-                setNewQuestion(false)
-                setTimeout(() => {
-                    setResponse(false)
-                }, 2000)
-            })
-            .catch((err) => {
-                setResponse(err.response.data.msg)
-            })
+    const sendQuestion = async () => {
+        await postQuestion(question)
+        getQuestions()
     }
 
     return (
@@ -86,7 +70,7 @@ function AdminFaqNew({ images, setNewQuestion, setResponse }) {
             </div>
             <div className="edit-buttons">
                 <button className="admin-button save-btn"
-                    onClick={insertNewQuestion}>
+                    onClick={sendQuestion}>
                     Mentés
                 </button>
                 <button className="admin-button"

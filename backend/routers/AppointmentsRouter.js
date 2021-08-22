@@ -63,8 +63,9 @@ router.post("/",
     async (req, res) => {
         const newAppointment = req.body
 
-        if (res.locals.user.userId !== newAppointment.userId
-            || res.locals.user.name !== newAppointment.userName) {
+        if ((res.locals.user.userId !== newAppointment.userId
+            || res.locals.user.name !== newAppointment.userName)
+            && res.locals.user.role !== "admin") {
             return res.status(403).json({ msg: "Eltérő user!" })
         }
 
@@ -89,7 +90,8 @@ router.delete("/:_id",
             )
         }
 
-        if (appointment.userId !== res.locals.user.userId) {
+        if (appointment.userId !== res.locals.user.userId
+            && res.locals.user.role !== "admin") {
             return res.status(403).json(
                 { msg: "Eltérő user!" }
             )

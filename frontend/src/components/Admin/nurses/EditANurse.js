@@ -1,13 +1,14 @@
 import React, { useState, useContext } from 'react'
-import axios from 'axios'
-import UrlContext from '../../../contexts/urlContext'
 import UserContext from '../../../contexts/userContext'
+import useNurses from '../../../hooks/useNurses'
 
-function EditANurse({ nurse, setResponse, setError}) {
+function EditANurse({ nurse, getNurses }) {
+
+    const { successHandler, errorHandler } = useContext(UserContext)
+    const { updateNurse, deleteNurse } = useNurses(errorHandler, successHandler)
     const [isEditable, setIsEditable] = useState(false)
     const [modifiedNurse, setModifiedNurse] = useState(nurse)
-    const url = useContext(UrlContext)
-    const { error401Handler } = useContext(UserContext)
+
 
     const handleDataChange = (e) => {
         const value = e.target.value;
@@ -15,47 +16,19 @@ function EditANurse({ nurse, setResponse, setError}) {
         setModifiedNurse({ ...modifiedNurse, [name]: value });
     }
 
-    const nurseUpdate = () => {
-        axios.put(`${url}/nurses/${modifiedNurse._id}`, modifiedNurse,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    authorization: `${localStorage.getItem('authorization')}`
-                },
-            })
-            .then((res) => {
-                setResponse(res.data.msg)
-                setIsEditable(false)
-                setTimeout(() => {
-                    setResponse(false)
-                }, 2000)
-            })
-            .catch((err) => {
-                setError(err.response.data.msg)
-                error401Handler(err)
-            })
+    const handleEditButton = async () => {
+        setIsEditable(!isEditable)
+        if (isEditable) {
+            await updateNurse(modifiedNurse._id, modifiedNurse);
+            getNurses()
+        }
     }
 
-    const doctorDelete = () => {
-        axios.delete(`${url}/nurses/${nurse._id}`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    authorization: `${localStorage.getItem('authorization')}`
-                },
-            })
-            .then((res) => {
-                setResponse(res.data.msg)
-                setIsEditable(false)
-                setTimeout(() => {
-                    setResponse(false)
-                }, 2000)
-            })
-            .catch((err) => {
-                setError(err.response.data.msg)
-                error401Handler(err)
-            })
+    const handleDeleteButton = async () => {
+        await deleteNurse(nurse._id)
+        getNurses()
     }
+
 
     return (
         <div className="dr">
@@ -71,14 +44,11 @@ function EditANurse({ nurse, setResponse, setError}) {
                 className={isEditable ? "active" : ""} />
             <div className="btns">
                 <button className="admin-button save-btn"
-                    onClick={() => {
-                        setIsEditable(!isEditable)
-                        isEditable && nurseUpdate()
-                    }}>
+                    onClick={handleEditButton}>
                     {isEditable ? "Mentés" : "Szerkesztés"}
                 </button>
                 <button className="admin-button delete-btn"
-                    onClick={doctorDelete}>
+                    onClick={handleDeleteButton}>
                     Törlés
                 </button>
             </div>

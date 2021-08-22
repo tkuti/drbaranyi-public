@@ -12,7 +12,8 @@ router.post("/:userId",
 
         const userId = req.params.userId
 
-        if (res.locals.user.userId !== userId) {
+        if (res.locals.user.userId !== userId &&
+            res.locals.user.role !== "admin") {
             return res.status(403).json({ msg: "Eltérő user!" })
         }
 
@@ -29,7 +30,8 @@ router.get("/byuser/:userId",
 
         const userId = req.params.userId
 
-        if (res.locals.user.userId !== userId) {
+        if (res.locals.user.userId !== userId &&
+            res.locals.user.role !== "admin") {
             return res.status(403).json({ msg: "Eltérő user!" })
         }
         const query = { userId: userId }

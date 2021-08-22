@@ -29,7 +29,6 @@ function useStreets(errorHandler, successHandler, setNewStreet ) {
         } catch (err) {
             errorHandler(err)
         }
-
     }
 
     const deleteStreet = async (streetId) => {

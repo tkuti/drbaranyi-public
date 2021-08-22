@@ -3,25 +3,21 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
-import axios from 'axios'
 import EditANurse from './EditANurse'
 import CreateNewNurse from './CreateNewNurse'
-import UrlContext from '../../../contexts/urlContext'
+import UserContext from '../../../contexts/userContext'
+import useNurses from '../../../hooks/useNurses'
+
 
 function EditNurses() {
-    const [nurseList, setNurseList] = useState()
-    const [response, setResponse] = useState(false)
-    const [error, setError] = useState(false)
+    const { successHandler, errorHandler } = useContext(UserContext)
+    const {nurses, getNurses} = useNurses(errorHandler, successHandler)
     const [newNurse, setNewNurse] = useState(false)
-    const url = useContext(UrlContext)
+
 
     useEffect(() => {
-        axios
-            .get(`${url}/nurses`)
-            .then((res) => {
-                setNurseList(res.data)
-            })
-    }, [response])
+        getNurses()
+    }, [])
 
 
     return (
@@ -36,22 +32,20 @@ function EditNurses() {
                 <Row>
                     <Col>
                         {
-                            nurseList &&
-                            nurseList.map((nurse) =>
+                            nurses &&
+                            nurses.map((nurse) =>
                                 <EditANurse
                                     key={nurse._id}
                                     nurse={nurse}
-                                    setResponse={setResponse}
-                                    setError={setError}
+                                    getNurses={getNurses}
                                 ></EditANurse>
                             )
                         }
                         {
                             newNurse &&
                             <CreateNewNurse
-                                setResponse={setResponse}
                                 setNewNurse={setNewNurse}
-                                setError={setError}
+                                getNurses={getNurses}
                             ></CreateNewNurse>
                         }
                     </Col>
@@ -64,18 +58,6 @@ function EditNurses() {
                         </button>
                     </Col>
                 </Row>
-                {
-                    response &&
-                    <div className="res-msg res-msg-success">
-                        {response}
-                    </div>
-                }
-                {
-                    error &&
-                    <div className="res-msg res-msg-error">
-                        {error}
-                    </div>
-                }
             </Container>
         </div>
     )

@@ -3,56 +3,31 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
-import axios from 'axios'
 import FaqEdit from './FaqEdit'
 import FaqNew from './FaqNew'
-import UrlContext from '../../../contexts/urlContext'
+import UserContext from '../../../contexts/userContext'
+import useQuestions from '../../../hooks/useQuestions'
+import useImages from '../../../hooks/useImages'
 
 function AdminFaq() {
-    const [questions, setQuestions] = useState()
-    const [images, setImages] = useState()
+
+    const { errorHandler, successHandler} = useContext(UserContext)
+    const {questions, getQuestions} = useQuestions(errorHandler)
+    const { images, postImage} = useImages(errorHandler, successHandler)
     const [selectedQuestion, setSelectedQuestion] = useState("")
     const [newImage, setNewImage] = useState()
-    const [response, setResponse] = useState(false)
     const [newQuestion, setNewQuestion] = useState(false)
-    const url = useContext(UrlContext)
 
 
     useEffect(() => {
-        axios
-            .get(`${url}/questions`)
-            .then((res) => {
-                setQuestions(res.data)
-            })
-    }, [response])
+        getQuestions()
+    }, [])
 
 
-    useEffect(() => {
-        axios
-            .get(`${url}/images`)
-            .then((res) => {
-                setImages(res.data)
-            })
-    }, [response])
-
-
-    const uploadImage = () => {
+    const uploadImage = async () => {
         const fd = new FormData()
         fd.append('image', newImage)
-        const config = {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-                authorization: `${localStorage.getItem('authorization')}`
-            }
-        }
-        axios
-            .post(`${url}/images`, fd, config)
-            .then((res) => {
-                setResponse(res.data.msg)
-                setTimeout(() => {
-                    setResponse(false)
-                }, 2000)
-            })
+        postImage(fd)
     }
 
     return (
@@ -99,7 +74,7 @@ function AdminFaq() {
                                 selectedQuestion={selectedQuestion}
                                 setSelectedQuestion={setSelectedQuestion}
                                 images={images}
-                                setResponse={setResponse}
+                                getQuestions={getQuestions}
                             ></FaqEdit>
                         }
                         {
@@ -107,7 +82,7 @@ function AdminFaq() {
                             <FaqNew
                                 images={images}
                                 setNewQuestion={setNewQuestion}
-                                setResponse={setResponse}>
+                                getQuestions={getQuestions}>
                             </FaqNew>
                         }
                     </Col>
@@ -128,12 +103,6 @@ function AdminFaq() {
                         </div>
                     </Col>
                 </Row>
-                {
-                    response &&
-                    <div className="res-msg res-msg-success">
-                        {response}
-                    </div>
-                }
             </Container>
         </div>
     )

@@ -6,7 +6,7 @@ const checkBody = require('../middlewares/checkBody')
 
 
 router.get("/", async (req, res) => {
-    console.log("fut")
+
     const streets = await Street.find()
     res.json(streets)
 });

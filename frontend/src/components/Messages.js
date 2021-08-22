@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
@@ -12,7 +12,25 @@ function Messages() {
     const { user, errorHandler } = useContext(UserContext)
     const [newMessage, setNewMessage] = useState("")
 
-    const { messages, postNewMessage } = useMessages(user, errorHandler, setNewMessage)
+    const { messages, getMessages, postNewMessage } = useMessages(errorHandler)
+
+    useEffect(() => {
+        getMessages(user.userId)
+    }, [])
+
+    
+    const sendNewMessage = async () => {
+        const message = {
+            userId: user.userId,
+            type: "question",
+            userName: user.name,
+            date: new Date(),
+            message: newMessage,
+            creatorId: user.userId
+        }
+        await postNewMessage(user.userId, message)
+        setNewMessage("")
+    }
 
 
     return (
@@ -30,8 +48,7 @@ function Messages() {
                                     value={newMessage}>
                                 </textarea>
                                 <button className="button" type="submit"
-                                    onClick={() =>
-                                        postNewMessage(newMessage)}>
+                                    onClick={sendNewMessage}>
                                     Küldés
                                 </button>
                             </form>
