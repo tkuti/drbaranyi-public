@@ -1,17 +1,8 @@
 require('dotenv').config()
+require("./config/dbConfig")
+
 const app = require("./app.js");
-const port = process.env.PORT
-
-const mongoose = require('mongoose')
-
-mongoose.connect( process.env.MONGO_URL,
-    {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        useFindAndModify: false
-    })
-    .then(() => console.log('MongoDB Connected'))
-    .catch(err => console.log(err))
+const port = process.env.PORT || 5000
 
 
 

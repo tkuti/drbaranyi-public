@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import api from '../api/createAxiosInstance'
 
-function useWarningMessages(type, successHandler, errorHandler) {
+function useWarningMessages(type, errorHandler, successHandler ) {
 
     const [messages, setMessages] = useState()
 

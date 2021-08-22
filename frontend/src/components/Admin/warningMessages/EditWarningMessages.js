@@ -10,7 +10,7 @@ import useWarningMessages from '../../../hooks/useWarningMessages'
 function EditWarningMessages () {
 
     const { successHandler, errorHandler } = useContext(UserContext)
-    const {messages, setMessages, postWarningMessages} = useWarningMessages("-", successHandler, errorHandler)
+    const {messages, setMessages, postWarningMessages} = useWarningMessages("-", errorHandler, successHandler)
 
 
     const handleMessageChange = (e) => {
