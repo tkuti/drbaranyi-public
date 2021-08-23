@@ -1,6 +1,6 @@
 swagger: "2.0"
 info:
-  description: "This is a server for an application of a pediatrist. It can store users, handle private messages and appointments. It's admin system provides management of the webpage content, messages and reservations. It has Google authentication system."
+  description: "This is a server for an application of a pediatrist. It can store users, handle private messages and appointments. Its admin system provides management of the webpage content, messages and reservations. It has Google authentication system."
   version: "1.0.0"
   title: "Dr Baranyi WebApp"
   contact:
