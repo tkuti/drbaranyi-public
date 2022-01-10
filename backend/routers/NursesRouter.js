@@ -4,6 +4,7 @@ const Nurse = require("../models/Nurse")
 const { checkUser, checkUserAdminRole } = require('../middlewares/checkAuthorization')
 const checkBody = require('../middlewares/checkBody')
 
+
 router.get("/", async (req, res) => {
 
     const nurses = await Nurse.find()

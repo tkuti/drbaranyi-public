@@ -246,15 +246,15 @@ $error-color: #c40b13;
       }
     }
     .rendelo {
-      #polcok {
+      #bed {
         width: 35%;
         float: right;
       }
       .img-container {
         display: flex;
         justify-content: space-evenly;
-        .img-rendelo {
-          width: 48%;
+        #surgery {
+          width: 100%;
         }
       }
     }

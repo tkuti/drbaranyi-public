@@ -9,11 +9,11 @@ The project is an application of a pediatrist. It can store users, handle privat
 ## Commands to start the application
 
 1. Pull the docker images from docker hub:
-    - docker pull tkuti/drbaranyiapppublic:1.0.1
+    - docker pull tkuti/drbaranyiapppublic:1.0.2
     - docker pull tkuti/drbaranyiserverpublic:1.0.1
 
 2. Run the containers:
-    - docker run -dp 3000:80 tkuti/drbaranyiapppublic:1.0.1
+    - docker run -dp 3000:80 tkuti/drbaranyiapppublic:1.0.2
     - docker run -dp 5000:5000 tkuti/drbaranyiserverpublic:1.0.1
 
 3. Open the browser:

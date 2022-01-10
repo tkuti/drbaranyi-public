@@ -1,4 +1,5 @@
 import React from 'react'
+import profil from '../../images/profil.jpg'
 
 function AboutMe() {
     
@@ -6,7 +7,7 @@ function AboutMe() {
         <div className="rolam">
             <p className="heading">Rólam</p>
             <hr />
-            <img src="https://s3.eu-west-2.amazonaws.com/medical-website-pictures/doktornoprofil.jpg" alt="profil" />
+            <img src={profil} alt="profil" />
             <p>Dr. Baranyi Judit vagyok.</p>
             <p>2008 november 1.-től kezdtem házi gyermekorvosként dolgozni Rákosszentmihályon.</p>
             <p>Csecsemő és gyermekgyógyász, továbbá aneszteziológus és intenzívterápiás szakvizsgám van, továbbá 16 évig részállásban mentőrvosként is dolgoztam.</p>
